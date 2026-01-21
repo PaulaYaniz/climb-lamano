@@ -120,13 +120,13 @@ export default class MenuScene extends Phaser.Scene {
             color: '#F39C12',
             fontStyle: 'bold'
         }).setOrigin(0.5);
-        this.add.text(750, yPos + 10, 'USA LAS FLECHAS', {
+        this.add.text(750, yPos + 10, 'SUELTA ESPACIO Y USA FLECHAS', {
             fontSize: '20px',
             fontFamily: 'Arial',
             color: '#ECF0F1',
             fontStyle: 'bold'
         }).setOrigin(0, 0.5);
-        this.add.text(750, yPos + 35, 'Muévete ↑ ↓ ← → en cualquier dirección', {
+        this.add.text(750, yPos + 35, 'Muévete ↑ ↓ ← → solo al soltar espacio', {
             fontSize: '16px',
             fontFamily: 'Arial',
             color: '#BDC3C7'
@@ -142,13 +142,13 @@ export default class MenuScene extends Phaser.Scene {
             color: '#F39C12',
             fontStyle: 'bold'
         }).setOrigin(0.5);
-        this.add.text(750, yPos + 10, 'MANTÉN ESPACIO PARA AGARRAR', {
+        this.add.text(750, yPos + 10, 'MANTÉN ESPACIO PARA CONGELAR', {
             fontSize: '20px',
             fontFamily: 'Arial',
             color: '#ECF0F1',
             fontStyle: 'bold'
         }).setOrigin(0, 0.5);
-        this.add.text(750, yPos + 35, 'Cerca de los círculos rojos para sujetarte', {
+        this.add.text(750, yPos + 35, 'Detén tu caída y mantén posición', {
             fontSize: '16px',
             fontFamily: 'Arial',
             color: '#BDC3C7'
@@ -164,13 +164,13 @@ export default class MenuScene extends Phaser.Scene {
             color: '#F39C12',
             fontStyle: 'bold'
         }).setOrigin(0.5);
-        this.add.text(750, yPos + 10, 'DESCANSA Y RECUPÉRATE', {
+        this.add.text(750, yPos + 10, 'SUELTA PARA RECUPERAR', {
             fontSize: '20px',
             fontFamily: 'Arial',
             color: '#ECF0F1',
             fontStyle: 'bold'
         }).setOrigin(0, 0.5);
-        this.add.text(750, yPos + 35, 'La resistencia se recupera cuando no escalas', {
+        this.add.text(750, yPos + 35, 'Resistencia se recupera al soltar espacio', {
             fontSize: '16px',
             fontFamily: 'Arial',
             color: '#BDC3C7'

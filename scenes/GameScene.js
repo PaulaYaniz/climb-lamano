@@ -131,7 +131,7 @@ export default class GameScene extends Phaser.Scene {
             color: '#ECF0F1',
             fontStyle: 'bold'
         });
-        this.add.text(panelX - 20, yPos, 'Mantén cerca del círculo', {
+        this.add.text(panelX - 20, yPos, 'Mantén para congelarte', {
             fontSize: '14px',
             fontFamily: 'Arial',
             color: '#BDC3C7'
@@ -139,21 +139,21 @@ export default class GameScene extends Phaser.Scene {
 
         // Tip
         yPos += 30;
-        this.add.text(panelX, yPos, 'Usa las flechas para volar', {
+        this.add.text(panelX, yPos, 'Suelta ESPACIO para moverte', {
             fontSize: '12px',
             fontFamily: 'Arial',
             color: '#95A5A6',
             align: 'center'
         }).setOrigin(0.5);
         yPos += 18;
-        this.add.text(panelX, yPos, 'Mantén ESPACIO cerca de los círculos', {
+        this.add.text(panelX, yPos, 'Mantén ESPACIO para congelar', {
             fontSize: '12px',
             fontFamily: 'Arial',
             color: '#95A5A6',
             align: 'center'
         }).setOrigin(0.5);
         yPos += 18;
-        this.add.text(panelX, yPos, '¡para agarrar y descansar!', {
+        this.add.text(panelX, yPos, '¡Escala rápido antes de caer!', {
             fontSize: '12px',
             fontFamily: 'Arial',
             color: '#95A5A6',

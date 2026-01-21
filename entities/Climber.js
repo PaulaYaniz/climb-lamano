@@ -93,109 +93,75 @@ export default class Climber {
     }
 
     handleGrabbing(nearestHold) {
-        const wasGrabbing = this.isGrabbing;
-
-        if (this.spaceKey.isDown && nearestHold && this.stamina > 1) {
-            // Start or continue grabbing
+        if (this.spaceKey.isDown && this.stamina > 1) {
+            // Holding space = freeze position
             if (!this.isGrabbing) {
                 this.isGrabbing = true;
-                this.currentHold = nearestHold.hold;
-
-                // Snap to hold slightly for better feel
-                const snapStrength = 0.3;
-                this.sprite.x += (nearestHold.hold.x - this.sprite.x) * snapStrength;
-                this.sprite.y += (nearestHold.hold.y - this.sprite.y) * snapStrength;
-
+                this.currentHold = nearestHold; // Keep for visual hints
                 // Particle effect on grab
                 this.createGrabParticles();
             }
 
-            // Disable gravity when grabbing
-            this.body.setGravityY(-800); // Counter world gravity
-            this.body.setDrag(900, 900);
+            // Freeze the climber in place
+            this.body.setVelocity(0, 0); // Stop all movement
+            this.body.setGravityY(-800); // Counter gravity to stay frozen
+            this.body.setDrag(10000, 10000); // Very high drag = no movement
 
         } else {
-            // Release
+            // Released space = can move but also falling
             if (this.isGrabbing) {
                 this.isGrabbing = false;
                 this.currentHold = null;
             }
 
-            // Reset to normal when not grabbing - let world gravity apply
-            this.body.setGravityY(0); // Reset body gravity to allow world gravity
-            this.body.setDrag(300, 0);
+            // Enable normal physics
+            this.body.setGravityY(0); // Let world gravity apply (800)
+            this.body.setDrag(300, 0); // Normal drag
         }
     }
 
     handleMovement() {
-        // Horizontal movement - always works (arrow keys or A/D)
         const leftPressed = this.cursors.left.isDown || this.wasdKeys.A.isDown;
         const rightPressed = this.cursors.right.isDown || this.wasdKeys.D.isDown;
         const upPressed = this.cursors.up.isDown || this.wasdKeys.W.isDown;
         const downPressed = this.cursors.down.isDown || this.wasdKeys.S.isDown;
 
-        // DEBUG: Log movement state
-        if (leftPressed || rightPressed || upPressed || downPressed) {
-            console.log('Input:', { left: leftPressed, right: rightPressed, up: upPressed, down: downPressed });
-            console.log('Velocity before:', { x: this.body.velocity.x, y: this.body.velocity.y });
-            console.log('Position:', { x: this.sprite.x, y: this.sprite.y });
-        }
-        
-        if (leftPressed) {
-            this.body.velocity.x = -this.moveSpeed;
-        } else if (rightPressed) {
-            this.body.velocity.x = this.moveSpeed;
-        } else {
-            // Slow down when no input
-            this.body.velocity.x = 0;
-        }
+        // ONLY allow movement when NOT holding space
+        if (!this.isGrabbing) {
+            // Horizontal movement
+            if (leftPressed) {
+                this.body.velocity.x = -this.moveSpeed;
+            } else if (rightPressed) {
+                this.body.velocity.x = this.moveSpeed;
+            } else {
+                this.body.velocity.x = 0;
+            }
 
-        // Vertical movement - already declared above
-
-        if (upPressed) {
-            if (this.isGrabbing && this.stamina > 1) {
-                // Climbing up while grabbing
+            // Vertical movement (adds to falling velocity)
+            if (upPressed) {
                 this.body.velocity.y = -this.climbSpeed;
                 this.animationState = 'climbing';
-            } else if (!this.isGrabbing) {
-                // Free movement up (like flying/swimming)
-                this.body.velocity.y = -this.climbSpeed;
-            }
-        } else if (downPressed) {
-            if (this.isGrabbing) {
-                // Climbing down while grabbing
+            } else if (downPressed) {
                 this.body.velocity.y = this.climbSpeed;
                 this.animationState = 'descending';
-            } else {
-                // Free movement down
-                this.body.velocity.y = this.climbSpeed;
             }
+            // If no up/down input, gravity handles falling
         } else {
-            // No vertical input
-            if (this.isGrabbing) {
-                // Hold position when grabbing
-                this.body.velocity.y = 0;
-            }
-            // Otherwise gravity handles falling
+            // When holding space, FREEZE completely
+            this.body.setVelocity(0, 0);
         }
     }
 
     updateStamina() {
-        const upPressed = this.cursors.up.isDown || this.wasdKeys.W.isDown;
-        const downPressed = this.cursors.down.isDown || this.wasdKeys.S.isDown;
-        
-        if (upPressed) {
-            // Drain stamina when moving up (whether grabbing or not)
+        if (this.isGrabbing) {
+            // Drain stamina while holding space (frozen)
             this.stamina = Math.max(0, this.stamina - this.staminaDrainRate);
-        } else if (this.isGrabbing && !upPressed && !downPressed) {
-            // Slowly drain when just hanging (very slow)
-            this.stamina = Math.max(0, this.stamina - this.staminaDrainRate * 0.05);
         } else {
-            // Recover when not moving up or just moving horizontally
+            // Recover stamina when not holding space
             this.stamina = Math.min(this.maxStamina, this.stamina + this.staminaRecoveryRate);
         }
 
-        // If stamina depleted, can't grab
+        // If stamina depleted, can't hold anymore
         if (this.stamina <= 0) {
             this.isGrabbing = false;
             this.currentHold = null;
