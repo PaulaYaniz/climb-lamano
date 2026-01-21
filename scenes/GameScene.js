@@ -301,11 +301,11 @@ export default class GameScene extends Phaser.Scene {
             this.grabIndicator.setText('✓ Agarre cerca');
             this.grabIndicator.setColor('#2ecc71');
         } else if (climberState.isGrabbing) {
-            this.grabIndicator.setText('⚡ AGARRADO');
-            this.grabIndicator.setColor('#f39c12');
+            this.grabIndicator.setText('💪 DESCANSANDO');
+            this.grabIndicator.setColor('#2ecc71');
         } else {
-            this.grabIndicator.setText('Escalando...');
-            this.grabIndicator.setColor('#95A5A6');
+            this.grabIndicator.setText('⚡ Escalando...');
+            this.grabIndicator.setColor('#e74c3c');
         }
     }
 

@@ -28,8 +28,8 @@ export default class Climber {
         // Movement constants
         this.moveSpeed = 220;
         this.climbSpeed = 200;
-        this.staminaDrainRate = 0.2;
-        this.staminaRecoveryRate = 2.0;
+        this.staminaDrainRate = 1.5; // Drains faster while moving
+        this.staminaRecoveryRate = 2.0; // Recovers while holding space
 
         // Input
         this.cursors = scene.input.keyboard.createCursorKeys();
@@ -155,17 +155,17 @@ export default class Climber {
 
     updateStamina() {
         if (this.isGrabbing) {
-            // Drain stamina while holding space (frozen)
-            this.stamina = Math.max(0, this.stamina - this.staminaDrainRate);
-        } else {
-            // Recover stamina when not holding space
+            // Recover stamina while holding space (resting on hold)
             this.stamina = Math.min(this.maxStamina, this.stamina + this.staminaRecoveryRate);
+        } else {
+            // Drain stamina while moving (not holding space)
+            this.stamina = Math.max(0, this.stamina - this.staminaDrainRate);
         }
 
-        // If stamina depleted, can't hold anymore
+        // If stamina depleted, force movement to stop
         if (this.stamina <= 0) {
-            this.isGrabbing = false;
-            this.currentHold = null;
+            // Player is exhausted - can still try to grab to recover
+            this.body.setVelocity(0, 0);
         }
     }
 

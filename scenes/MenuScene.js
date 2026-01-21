@@ -72,6 +72,27 @@ export default class MenuScene extends Phaser.Scene {
             fontStyle: 'bold'
         }).setOrigin(0.5);
 
+        // Birthday message
+        const birthdayMessage = this.add.text(700, 210, '🎉 ¡Feliz Cumpleaños Papá, ya tienes 57! 🎉', {
+            fontSize: '22px',
+            fontFamily: 'Arial',
+            color: '#FFFFFF',
+            stroke: '#e74c3c',
+            strokeThickness: 3,
+            fontStyle: 'bold'
+        }).setOrigin(0.5);
+
+        // Pulse animation on birthday message
+        this.tweens.add({
+            targets: birthdayMessage,
+            scaleX: 1.05,
+            scaleY: 1.05,
+            duration: 1500,
+            yoyo: true,
+            repeat: -1,
+            ease: 'Sine.easeInOut'
+        });
+
         // Left panel with shadow effect
         const leftShadow = this.add.rectangle(305, 465, 420, 500, 0x000000, 0.3);
         const leftPanel = this.add.rectangle(300, 460, 420, 500, 0x34495E, 0.95);
@@ -140,87 +161,51 @@ export default class MenuScene extends Phaser.Scene {
             strokeThickness: 3
         }).setOrigin(0.5);
 
-        let yPos = 320;
+        let yPos = 340;
 
-        // Step 1 with improved styling
-        const step1Container = this.add.rectangle(900, yPos + 18, 460, 72, 0x27ae60, 0.2);
-        step1Container.setStrokeStyle(3, 0x27ae60, 0.5);
-
-        const step1Number = this.add.circle(725, yPos + 18, 20, 0x27ae60);
-        this.add.text(725, yPos + 18, '1', {
-            fontSize: '22px',
-            fontFamily: 'Arial',
-            color: '#FFFFFF',
-            fontStyle: 'bold'
-        }).setOrigin(0.5);
-
-        this.add.text(900, yPos + 5, '⬆️ Usa las FLECHAS ⬇️', {
-            fontSize: '18px',
+        // Simplified instructions
+        this.add.text(900, yPos, '⬆️ FLECHAS: Muévete', {
+            fontSize: '20px',
             fontFamily: 'Arial',
             color: '#ECF0F1',
             align: 'center',
             fontStyle: 'bold'
         }).setOrigin(0.5);
-        this.add.text(900, yPos + 30, 'Muévete en cualquier dirección', {
-            fontSize: '15px',
+
+        yPos += 55;
+
+        this.add.text(900, yPos, '🤚 ESPACIO: Descansa', {
+            fontSize: '20px',
             fontFamily: 'Arial',
-            color: '#BDC3C7',
+            color: '#ECF0F1',
+            align: 'center',
+            fontStyle: 'bold'
+        }).setOrigin(0.5);
+
+        yPos += 55;
+
+        this.add.text(900, yPos, '🚩 META: Bandera dorada', {
+            fontSize: '20px',
+            fontFamily: 'Arial',
+            color: '#ECF0F1',
+            align: 'center',
+            fontStyle: 'bold'
+        }).setOrigin(0.5);
+
+        yPos += 70;
+
+        // Tip
+        this.add.text(900, yPos, '💡 ¡Descansa antes de quedarte', {
+            fontSize: '16px',
+            fontFamily: 'Arial',
+            color: '#F39C12',
             align: 'center'
         }).setOrigin(0.5);
 
-        yPos += 95;
-
-        // Step 2
-        const step2Container = this.add.rectangle(900, yPos + 18, 460, 72, 0xf39c12, 0.2);
-        step2Container.setStrokeStyle(3, 0xf39c12, 0.5);
-
-        const step2Number = this.add.circle(725, yPos + 18, 20, 0xf39c12);
-        this.add.text(725, yPos + 18, '2', {
-            fontSize: '22px',
+        this.add.text(900, yPos + 25, 'sin resistencia!', {
+            fontSize: '16px',
             fontFamily: 'Arial',
-            color: '#FFFFFF',
-            fontStyle: 'bold'
-        }).setOrigin(0.5);
-
-        this.add.text(900, yPos + 5, '🤚 Mantén ESPACIO', {
-            fontSize: '18px',
-            fontFamily: 'Arial',
-            color: '#ECF0F1',
-            align: 'center',
-            fontStyle: 'bold'
-        }).setOrigin(0.5);
-        this.add.text(900, yPos + 30, 'Congela y recupera resistencia', {
-            fontSize: '15px',
-            fontFamily: 'Arial',
-            color: '#BDC3C7',
-            align: 'center'
-        }).setOrigin(0.5);
-
-        yPos += 95;
-
-        // Step 3
-        const step3Container = this.add.rectangle(900, yPos + 18, 460, 72, 0xe74c3c, 0.2);
-        step3Container.setStrokeStyle(3, 0xe74c3c, 0.5);
-
-        const step3Number = this.add.circle(725, yPos + 18, 20, 0xe74c3c);
-        this.add.text(725, yPos + 18, '3', {
-            fontSize: '22px',
-            fontFamily: 'Arial',
-            color: '#FFFFFF',
-            fontStyle: 'bold'
-        }).setOrigin(0.5);
-
-        this.add.text(900, yPos + 5, '🚩 Llega a la Cima', {
-            fontSize: '18px',
-            fontFamily: 'Arial',
-            color: '#ECF0F1',
-            align: 'center',
-            fontStyle: 'bold'
-        }).setOrigin(0.5);
-        this.add.text(900, yPos + 30, 'Alcanza cualquier bandera dorada', {
-            fontSize: '15px',
-            fontFamily: 'Arial',
-            color: '#BDC3C7',
+            color: '#F39C12',
             align: 'center'
         }).setOrigin(0.5);
 
