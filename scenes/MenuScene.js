@@ -32,14 +32,13 @@ export default class MenuScene extends Phaser.Scene {
             });
         }
 
-        // Title background
-        const titleBg = this.add.rectangle(700, 100, 500, 100, 0x000000);
-
-        // Title
+        // Title with shadow effect
         const title = this.add.text(700, 100, 'LA MANO', {
-            fontSize: '64px',
-            fontFamily: 'Arial',
-            color: '#FFFFFF'
+            fontSize: '80px',
+            fontFamily: 'Arial Black',
+            color: '#FFFFFF',
+            stroke: '#2C3E50',
+            strokeThickness: 8
         }).setOrigin(0.5);
 
         // Title animation
@@ -53,8 +52,18 @@ export default class MenuScene extends Phaser.Scene {
             ease: 'Sine.easeInOut'
         });
 
-        // Left section background
-        const leftBg = this.add.rectangle(300, 450, 500, 600, 0x000000);
+        // Subtitle
+        this.add.text(700, 165, 'Juego de Escalada', {
+            fontSize: '24px',
+            fontFamily: 'Arial',
+            color: '#ECF0F1',
+            stroke: '#2C3E50',
+            strokeThickness: 3
+        }).setOrigin(0.5);
+
+        // Left panel
+        const leftPanel = this.add.rectangle(300, 450, 480, 580, 0x2C3E50, 0.85);
+        leftPanel.setStrokeStyle(4, 0x3498db);
 
         // Hand preview image
         const handPreview = this.add.image(300, 380, 'hand');
@@ -74,83 +83,116 @@ export default class MenuScene extends Phaser.Scene {
             ease: 'Sine.easeInOut'
         });
 
-        this.add.text(300, 600, '¡Escala la mano!', {
-            fontSize: '24px',
-            fontFamily: 'Arial',
-            color: '#FFFFFF',
-            align: 'center'
-        }).setOrigin(0.5);
-
-        // Right section background
-        const rightBg = this.add.rectangle(900, 450, 600, 600, 0x000000);
-
-        this.add.text(900, 220, 'CONTROLES', {
-            fontSize: '28px',
-            fontFamily: 'Arial',
-            color: '#FFFFFF'
-        }).setOrigin(0.5);
-
-        let yPos = 300;
-
-        // Controls
-        this.add.text(900, yPos, 'FLECHAS: Muévete', {
-            fontSize: '20px',
-            fontFamily: 'Arial',
-            color: '#FFFFFF',
-            align: 'center'
-        }).setOrigin(0.5);
-
-        yPos += 80;
-
-        this.add.text(900, yPos, 'ESPACIO: Congelar', {
-            fontSize: '20px',
-            fontFamily: 'Arial',
-            color: '#FFFFFF',
-            align: 'center'
-        }).setOrigin(0.5);
-
-        yPos += 120;
-
-        this.add.text(900, yPos, 'Llega a la bandera 🚩', {
+        this.add.text(300, 240, 'EL DESAFÍO', {
             fontSize: '22px',
             fontFamily: 'Arial',
-            color: '#FFFFFF',
+            color: '#3498db',
+            fontStyle: 'bold'
+        }).setOrigin(0.5);
+
+        this.add.text(300, 650, '¡Escala la mano gigante\nhasta alcanzar la cima!', {
+            fontSize: '18px',
+            fontFamily: 'Arial',
+            color: '#ECF0F1',
+            align: 'center',
+            lineSpacing: 8
+        }).setOrigin(0.5);
+
+        // Right panel
+        const rightPanel = this.add.rectangle(900, 450, 600, 580, 0x2C3E50, 0.85);
+        rightPanel.setStrokeStyle(4, 0xe74c3c);
+
+        this.add.text(900, 240, 'CÓMO JUGAR', {
+            fontSize: '26px',
+            fontFamily: 'Arial',
+            color: '#e74c3c',
+            fontStyle: 'bold'
+        }).setOrigin(0.5);
+
+        let yPos = 310;
+
+        // Step 1
+        const step1Bg = this.add.rectangle(900, yPos + 20, 520, 70, 0x34495E, 0.6);
+        this.add.text(900, yPos, '1. Usa las FLECHAS para moverte', {
+            fontSize: '18px',
+            fontFamily: 'Arial',
+            color: '#ECF0F1',
+            align: 'center'
+        }).setOrigin(0.5);
+        this.add.text(900, yPos + 25, 'Muévete ↑ ↓ ← → en cualquier dirección', {
+            fontSize: '15px',
+            fontFamily: 'Arial',
+            color: '#BDC3C7',
+            align: 'center'
+        }).setOrigin(0.5);
+
+        yPos += 100;
+
+        // Step 2
+        const step2Bg = this.add.rectangle(900, yPos + 20, 520, 70, 0x34495E, 0.6);
+        this.add.text(900, yPos, '2. Mantén ESPACIO para agarrarte', {
+            fontSize: '18px',
+            fontFamily: 'Arial',
+            color: '#ECF0F1',
+            align: 'center'
+        }).setOrigin(0.5);
+        this.add.text(900, yPos + 25, 'Congela tu posición y no caigas', {
+            fontSize: '15px',
+            fontFamily: 'Arial',
+            color: '#BDC3C7',
+            align: 'center'
+        }).setOrigin(0.5);
+
+        yPos += 100;
+
+        // Step 3
+        const step3Bg = this.add.rectangle(900, yPos + 20, 520, 70, 0x34495E, 0.6);
+        this.add.text(900, yPos, '3. Llega a la bandera 🚩', {
+            fontSize: '18px',
+            fontFamily: 'Arial',
+            color: '#ECF0F1',
+            align: 'center'
+        }).setOrigin(0.5);
+        this.add.text(900, yPos + 25, 'Alcanza cualquier bandera en la cima', {
+            fontSize: '15px',
+            fontFamily: 'Arial',
+            color: '#BDC3C7',
             align: 'center'
         }).setOrigin(0.5);
 
         // Start button
-        const startButton = this.add.rectangle(700, 730, 300, 60);
-        startButton.setStrokeStyle(3, 0xFFFFFF);
-        startButton.setFillStyle(0x000000, 0);
+        const startButton = this.add.rectangle(700, 730, 380, 70, 0x27ae60);
+        startButton.setStrokeStyle(5, 0x229954);
         startButton.setInteractive({ useHandCursor: true });
 
-        const startText = this.add.text(700, 730, 'COMENZAR', {
-            fontSize: '22px',
+        const startText = this.add.text(700, 730, '🚀 COMENZAR A ESCALAR', {
+            fontSize: '28px',
             fontFamily: 'Arial',
-            color: '#FFFFFF'
+            color: '#FFFFFF',
+            fontStyle: 'bold',
+            stroke: '#1e8449',
+            strokeThickness: 3
         }).setOrigin(0.5);
 
         // Button hover effects
         startButton.on('pointerover', () => {
-            startButton.setFillStyle(0xFFFFFF, 1);
-            startText.setColor('#000000');
+            startButton.setFillStyle(0x2ecc71);
             this.tweens.add({
                 targets: [startButton, startText],
-                scaleX: 1.05,
-                scaleY: 1.05,
-                duration: 150,
-                ease: 'Power2'
+                scaleX: 1.08,
+                scaleY: 1.08,
+                duration: 200,
+                ease: 'Back.easeOut'
             });
         });
 
         startButton.on('pointerout', () => {
-            startButton.setFillStyle(0x000000, 0);
-            startText.setColor('#FFFFFF');
+            startButton.setFillStyle(0x27ae60);
             this.tweens.add({
                 targets: [startButton, startText],
                 scaleX: 1,
                 scaleY: 1,
-                duration: 150,
+                duration: 200,
                 ease: 'Power2'
             });
         });

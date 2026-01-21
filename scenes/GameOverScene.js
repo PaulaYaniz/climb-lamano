@@ -17,77 +17,107 @@ export default class GameOverScene extends Phaser.Scene {
         const sky = this.add.rectangle(600, 400, 1200, 800, 0x87CEEB);
         sky.setAlpha(0.7);
 
-        // Title background
-        const titleBg = this.add.rectangle(600, 100, 700, 80, 0x000000);
+        // Victory banner
+        const banner = this.add.rectangle(600, 120, 900, 140, 0x27ae60);
+        banner.setStrokeStyle(6, 0x229954);
 
-        const victoryText = this.add.text(600, 100, '¡VICTORIA!', {
-            fontSize: '56px',
+        const victoryText = this.add.text(600, 120, '🎉 ¡CIMA CONQUISTADA! 🎉', {
+            fontSize: '52px',
             fontFamily: 'Arial',
-            color: '#FFFFFF'
+            color: '#FFFFFF',
+            fontStyle: 'bold',
+            stroke: '#1e8449',
+            strokeThickness: 5
         }).setOrigin(0.5);
 
         // Pulse animation on victory text
         this.tweens.add({
             targets: victoryText,
-            scaleX: 1.1,
-            scaleY: 1.1,
+            scaleX: 1.08,
+            scaleY: 1.08,
             duration: 1000,
             yoyo: true,
             repeat: -1,
             ease: 'Sine.easeInOut'
         });
 
-        // Stats background
-        const statsBg = this.add.rectangle(600, 420, 700, 420, 0x000000);
+        // Stats container
+        const statsContainer = this.add.rectangle(600, 420, 750, 380, 0x2C3E50, 0.9);
+        statsContainer.setStrokeStyle(5, 0x34495E);
+
+        // Stats header
+        this.add.text(600, 260, 'TU ESCALADA', {
+            fontSize: '32px',
+            fontFamily: 'Arial',
+            color: '#3498db',
+            fontStyle: 'bold'
+        }).setOrigin(0.5);
 
         // Format time
         const minutes = Math.floor(this.time / 60);
         const seconds = this.time % 60;
         const timeStr = `${minutes}:${seconds.toString().padStart(2, '0')}`;
 
-        let yPos = 280;
+        // Finger conquered with emoji
+        const fingerEmojis = {
+            thumb: '👍',
+            index: '☝️',
+            middle: '🖕',
+            ring: '💍',
+            pinky: '🤙'
+        };
+        const fingerEmoji = fingerEmojis[this.finger.toLowerCase()] || '✋';
 
-        // Height
-        const heightText = this.add.text(600, yPos, `${this.height}m`, {
-            fontSize: '48px',
-            fontFamily: 'Arial',
-            color: '#FFFFFF',
-            align: 'center'
-        }).setOrigin(0.5);
+        // Individual stats
+        const stats = [
+            { icon: fingerEmoji, label: 'Dedo', value: this.finger.toUpperCase() },
+            { icon: '⛰️', label: 'Altura', value: `${this.height}m` },
+            { icon: '⏱️', label: 'Tiempo', value: timeStr }
+        ];
 
-        yPos += 60;
+        let yPos = 330;
 
-        // Time
-        const timeText = this.add.text(600, yPos, timeStr, {
-            fontSize: '48px',
-            fontFamily: 'Arial',
-            color: '#FFFFFF',
-            align: 'center'
-        }).setOrigin(0.5);
+        stats.forEach((stat, index) => {
+            const statBg = this.add.rectangle(600, yPos + 35, 680, 80, 0x34495E, 0.5);
 
-        // Animate stats appearing
-        heightText.setAlpha(0);
-        timeText.setAlpha(0);
+            const iconText = this.add.text(350, yPos + 20, stat.icon, {
+                fontSize: '40px'
+            }).setOrigin(0.5);
 
-        this.tweens.add({
-            targets: [heightText],
-            alpha: 1,
-            duration: 500,
-            delay: 500,
-            ease: 'Power2'
-        });
+            const labelText = this.add.text(450, yPos + 10, stat.label + ':', {
+                fontSize: '20px',
+                fontFamily: 'Arial',
+                color: '#BDC3C7',
+                fontStyle: 'bold'
+            });
 
-        this.tweens.add({
-            targets: [timeText],
-            alpha: 1,
-            duration: 500,
-            delay: 700,
-            ease: 'Power2'
+            const valueText = this.add.text(450, yPos + 38, stat.value, {
+                fontSize: '28px',
+                fontFamily: 'Arial',
+                color: '#ECF0F1',
+                fontStyle: 'bold'
+            });
+
+            // Animate stats appearing
+            statBg.setAlpha(0);
+            iconText.setAlpha(0);
+            labelText.setAlpha(0);
+            valueText.setAlpha(0);
+
+            this.tweens.add({
+                targets: [statBg, iconText, labelText, valueText],
+                alpha: 1,
+                duration: 500,
+                delay: 500 + index * 200,
+                ease: 'Power2'
+            });
+
+            yPos += 95;
         });
 
         // Star rating based on time
         const rating = this.calculateRating(this.time, this.height);
-        this.showStarRating(rating, 600, 490);
+        this.showStarRating(rating, 600, 650);
 
         // Buttons
         this.createButtons();
@@ -142,49 +172,52 @@ export default class GameOverScene extends Phaser.Scene {
 
     createButtons() {
         // Play Again button
-        const playButton = this.add.rectangle(450, 730, 250, 55);
-        playButton.setStrokeStyle(3, 0xFFFFFF);
-        playButton.setFillStyle(0x000000, 0);
+        const playButton = this.add.rectangle(450, 735, 280, 60, 0x3498db);
+        playButton.setStrokeStyle(4, 0x2980b9);
         playButton.setInteractive({ useHandCursor: true });
 
-        const playText = this.add.text(450, 730, 'DE NUEVO', {
+        const playText = this.add.text(450, 735, '🔄 JUGAR DE NUEVO', {
             fontSize: '20px',
             fontFamily: 'Arial',
-            color: '#FFFFFF'
+            color: '#FFFFFF',
+            fontStyle: 'bold',
+            stroke: '#2980b9',
+            strokeThickness: 2
         }).setOrigin(0.5);
 
         // Main Menu button
-        const menuButton = this.add.rectangle(750, 730, 250, 55);
-        menuButton.setStrokeStyle(3, 0xFFFFFF);
-        menuButton.setFillStyle(0x000000, 0);
+        const menuButton = this.add.rectangle(750, 735, 280, 60, 0xe74c3c);
+        menuButton.setStrokeStyle(4, 0xc0392b);
         menuButton.setInteractive({ useHandCursor: true });
 
-        const menuText = this.add.text(750, 730, 'MENÚ', {
+        const menuText = this.add.text(750, 735, '🏠 MENÚ PRINCIPAL', {
             fontSize: '20px',
             fontFamily: 'Arial',
-            color: '#FFFFFF'
+            color: '#FFFFFF',
+            fontStyle: 'bold',
+            stroke: '#c0392b',
+            strokeThickness: 2
         }).setOrigin(0.5);
 
         // Play Again hover
         playButton.on('pointerover', () => {
-            playButton.setFillStyle(0xFFFFFF, 1);
-            playText.setColor('#000000');
+            playButton.setFillStyle(0x5dade2);
             this.tweens.add({
                 targets: [playButton, playText],
-                scaleX: 1.05,
-                scaleY: 1.05,
-                duration: 150
+                scaleX: 1.08,
+                scaleY: 1.08,
+                duration: 200,
+                ease: 'Back.easeOut'
             });
         });
 
         playButton.on('pointerout', () => {
-            playButton.setFillStyle(0x000000, 0);
-            playText.setColor('#FFFFFF');
+            playButton.setFillStyle(0x3498db);
             this.tweens.add({
                 targets: [playButton, playText],
                 scaleX: 1,
                 scaleY: 1,
-                duration: 150
+                duration: 200
             });
         });
 
@@ -197,24 +230,23 @@ export default class GameOverScene extends Phaser.Scene {
 
         // Menu hover
         menuButton.on('pointerover', () => {
-            menuButton.setFillStyle(0xFFFFFF, 1);
-            menuText.setColor('#000000');
+            menuButton.setFillStyle(0xec7063);
             this.tweens.add({
                 targets: [menuButton, menuText],
-                scaleX: 1.05,
-                scaleY: 1.05,
-                duration: 150
+                scaleX: 1.08,
+                scaleY: 1.08,
+                duration: 200,
+                ease: 'Back.easeOut'
             });
         });
 
         menuButton.on('pointerout', () => {
-            menuButton.setFillStyle(0x000000, 0);
-            menuText.setColor('#FFFFFF');
+            menuButton.setFillStyle(0xe74c3c);
             this.tweens.add({
                 targets: [menuButton, menuText],
                 scaleX: 1,
                 scaleY: 1,
-                duration: 150
+                duration: 200
             });
         });
 

@@ -88,74 +88,122 @@ export default class GameScene extends Phaser.Scene {
         const panelWidth = 240;
 
         // Side panel background
-        const panel = this.add.rectangle(panelX, 400, panelWidth, 800, 0x000000);
+        const panel = this.add.rectangle(panelX, 400, panelWidth, 800, 0x2C3E50, 0.9);
+        panel.setStrokeStyle(4, 0x34495E);
 
         // Title
         this.add.text(panelX, 50, 'LA MANO', {
-            fontSize: '20px',
+            fontSize: '24px',
             fontFamily: 'Arial',
-            color: '#FFFFFF'
+            color: '#ECF0F1',
+            fontStyle: 'bold'
         }).setOrigin(0.5);
+
+        // Divider
+        this.add.rectangle(panelX, 80, 200, 3, 0x3498db);
 
         let yPos = 120;
 
-        // Stamina
-        this.add.text(panelX, yPos, 'RESISTENCIA', {
-            fontSize: '16px',
+        // Stamina section
+        this.add.text(panelX, yPos, '💪 RESISTENCIA', {
+            fontSize: '18px',
             fontFamily: 'Arial',
-            color: '#FFFFFF'
+            color: '#f39c12',
+            fontStyle: 'bold'
         }).setOrigin(0.5);
 
-        yPos += 40;
-        const staminaWidth = 180;
-        const staminaHeight = 25;
+        yPos += 45;
+        const staminaWidth = 190;
+        const staminaHeight = 28;
 
         this.staminaBg = this.add.rectangle(
             panelX,
             yPos,
             staminaWidth,
             staminaHeight,
-            0x000000,
-            0
+            0x34495E
         );
-        this.staminaBg.setStrokeStyle(2, 0xFFFFFF);
+        this.staminaBg.setStrokeStyle(3, 0x7F8C8D);
 
         this.staminaBar = this.add.rectangle(
             panelX - staminaWidth / 2,
             yPos,
             staminaWidth,
             staminaHeight,
-            0xFFFFFF
+            0x2ecc71
         );
         this.staminaBar.setOrigin(0, 0.5);
 
         yPos += 40;
         this.staminaText = this.add.text(panelX, yPos, '100%', {
-            fontSize: '18px',
-            fontFamily: 'Arial',
-            color: '#FFFFFF'
-        }).setOrigin(0.5);
-
-        // Stats
-        yPos += 60;
-        this.heightText = this.add.text(panelX, yPos, '0m', {
             fontSize: '20px',
             fontFamily: 'Arial',
-            color: '#FFFFFF'
+            color: '#ECF0F1',
+            fontStyle: 'bold'
+        }).setOrigin(0.5);
+
+        // Divider
+        yPos += 35;
+        this.add.rectangle(panelX, yPos, 200, 2, 0x34495E);
+
+        // Stats section
+        yPos += 40;
+        this.add.text(panelX, yPos, '📊 ESTADÍSTICAS', {
+            fontSize: '18px',
+            fontFamily: 'Arial',
+            color: '#3498db',
+            fontStyle: 'bold'
+        }).setOrigin(0.5);
+
+        yPos += 45;
+        this.add.text(panelX, yPos, 'Altura:', {
+            fontSize: '16px',
+            fontFamily: 'Arial',
+            color: '#BDC3C7'
+        }).setOrigin(0.5);
+
+        yPos += 30;
+        this.heightText = this.add.text(panelX, yPos, '0m', {
+            fontSize: '32px',
+            fontFamily: 'Arial',
+            color: '#ECF0F1',
+            fontStyle: 'bold'
+        }).setOrigin(0.5);
+
+        yPos += 50;
+        this.add.text(panelX, yPos, 'Tiempo:', {
+            fontSize: '16px',
+            fontFamily: 'Arial',
+            color: '#BDC3C7'
+        }).setOrigin(0.5);
+
+        yPos += 30;
+        this.timerText = this.add.text(panelX, yPos, '0:00', {
+            fontSize: '32px',
+            fontFamily: 'Arial',
+            color: '#ECF0F1',
+            fontStyle: 'bold'
+        }).setOrigin(0.5);
+
+        // Divider
+        yPos += 45;
+        this.add.rectangle(panelX, yPos, 200, 2, 0x34495E);
+
+        // Status indicator
+        yPos += 40;
+        this.add.text(panelX, yPos, '🎯 ESTADO', {
+            fontSize: '18px',
+            fontFamily: 'Arial',
+            color: '#e74c3c',
+            fontStyle: 'bold'
         }).setOrigin(0.5);
 
         yPos += 40;
-        this.timerText = this.add.text(panelX, yPos, '0:00', {
-            fontSize: '20px',
-            fontFamily: 'Arial',
-            color: '#FFFFFF'
-        }).setOrigin(0.5);
-
-        yPos += 60;
         this.grabIndicator = this.add.text(panelX, yPos, '', {
-            fontSize: '14px',
+            fontSize: '16px',
             fontFamily: 'Arial',
-            color: '#FFFFFF'
+            color: '#2ecc71',
+            fontStyle: 'bold'
         }).setOrigin(0.5);
 
         // Set everything to be fixed on screen
@@ -216,13 +264,15 @@ export default class GameScene extends Phaser.Scene {
         // Stamina bar
         const stamina = this.climber.getStamina();
         const staminaPercent = stamina / 100;
-        this.staminaBar.width = 180 * staminaPercent;
+        this.staminaBar.width = 190 * staminaPercent;
 
         // Stamina percentage text
         this.staminaText.setText(`${Math.floor(stamina)}%`);
 
-        // Keep stamina bar always white
+        // Color change based on stamina level
         if (stamina < 30) {
+            this.staminaBar.setFillStyle(0xe74c3c); // Red
+            this.staminaText.setColor('#e74c3c');
             // Pulse warning when low
             if (!this.staminaPulse) {
                 this.staminaPulse = true;
@@ -236,17 +286,26 @@ export default class GameScene extends Phaser.Scene {
                     }
                 });
             }
+        } else if (stamina < 60) {
+            this.staminaBar.setFillStyle(0xf39c12); // Orange
+            this.staminaText.setColor('#f39c12');
+            this.staminaBar.setAlpha(1);
         } else {
+            this.staminaBar.setFillStyle(0x2ecc71); // Green
+            this.staminaText.setColor('#ECF0F1');
             this.staminaBar.setAlpha(1);
         }
 
         // Grab indicator
         if (climberState.nearestHold && !climberState.isGrabbing) {
-            this.grabIndicator.setText('Cerca');
+            this.grabIndicator.setText('✓ Agarre cerca');
+            this.grabIndicator.setColor('#2ecc71');
         } else if (climberState.isGrabbing) {
-            this.grabIndicator.setText('AGARRADO');
+            this.grabIndicator.setText('⚡ AGARRADO');
+            this.grabIndicator.setColor('#f39c12');
         } else {
-            this.grabIndicator.setText('');
+            this.grabIndicator.setText('Escalando...');
+            this.grabIndicator.setColor('#95A5A6');
         }
     }
 
