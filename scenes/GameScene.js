@@ -87,18 +87,12 @@ export default class GameScene extends Phaser.Scene {
         const panelX = 1150;
         const panelWidth = 240;
 
-        // Side panel background
-        const panel = this.add.rectangle(panelX, 400, panelWidth, 800, 0x000000, 0.25);
-
         // Title
         this.add.text(panelX, 50, 'LA MANO', {
             fontSize: '20px',
             fontFamily: 'Arial',
             color: '#FFFFFF'
         }).setOrigin(0.5);
-
-        // Divider
-        this.add.rectangle(panelX, 80, 200, 1, 0xFFFFFF, 0.2);
 
         // Controls section
         let yPos = 120;
@@ -132,33 +126,6 @@ export default class GameScene extends Phaser.Scene {
             color: 'rgba(255, 255, 255, 0.7)'
         });
 
-        // Tip
-        yPos += 30;
-        this.add.text(panelX, yPos, 'Suelta ESPACIO para moverte', {
-            fontSize: '11px',
-            fontFamily: 'Arial',
-            color: 'rgba(255, 255, 255, 0.5)',
-            align: 'center'
-        }).setOrigin(0.5);
-        yPos += 18;
-        this.add.text(panelX, yPos, 'Mantén ESPACIO para congelar', {
-            fontSize: '11px',
-            fontFamily: 'Arial',
-            color: 'rgba(255, 255, 255, 0.5)',
-            align: 'center'
-        }).setOrigin(0.5);
-        yPos += 18;
-        this.add.text(panelX, yPos, '¡Escala rápido antes de caer!', {
-            fontSize: '11px',
-            fontFamily: 'Arial',
-            color: 'rgba(255, 255, 255, 0.5)',
-            align: 'center'
-        }).setOrigin(0.5);
-
-        // Divider
-        yPos += 25;
-        this.add.rectangle(panelX, yPos, 200, 1, 0xFFFFFF, 0.2);
-
         // Stamina section
         yPos += 30;
         this.add.text(panelX, yPos, 'RESISTENCIA', {
@@ -169,24 +136,24 @@ export default class GameScene extends Phaser.Scene {
 
         yPos += 40;
         const staminaWidth = 180;
-        const staminaHeight = 30;
+        const staminaHeight = 25;
 
         this.staminaBg = this.add.rectangle(
             panelX,
             yPos,
             staminaWidth,
             staminaHeight,
-            0xFFFFFF,
-            0.2
+            0x000000,
+            0
         );
+        this.staminaBg.setStrokeStyle(2, 0xFFFFFF);
 
         this.staminaBar = this.add.rectangle(
             panelX - staminaWidth / 2,
             yPos,
             staminaWidth,
             staminaHeight,
-            0xFFFFFF,
-            0.8
+            0xFFFFFF
         );
         this.staminaBar.setOrigin(0, 0.5);
 
@@ -197,10 +164,6 @@ export default class GameScene extends Phaser.Scene {
             fontFamily: 'Arial',
             color: 'rgba(255, 255, 255, 0.9)'
         }).setOrigin(0.5);
-
-        // Divider
-        yPos += 40;
-        this.add.rectangle(panelX, yPos, 200, 1, 0xFFFFFF, 0.2);
 
         // Stats section
         yPos += 30;
@@ -237,10 +200,6 @@ export default class GameScene extends Phaser.Scene {
             fontFamily: 'Arial',
             color: 'rgba(255, 255, 255, 0.9)'
         }).setOrigin(0.5);
-
-        // Divider
-        yPos += 40;
-        this.add.rectangle(panelX, yPos, 200, 1, 0xFFFFFF, 0.2);
 
         // Goal section
         yPos += 30;
@@ -327,15 +286,14 @@ export default class GameScene extends Phaser.Scene {
         // Stamina percentage text
         this.staminaText.setText(`${Math.floor(stamina)}%`);
 
-        // Subtle opacity change based on stamina level
+        // Keep stamina bar always white
         if (stamina < 30) {
-            this.staminaBar.setFillStyle(0xFFFFFF, 0.5);
             // Pulse warning when low
             if (!this.staminaPulse) {
                 this.staminaPulse = true;
                 this.tweens.add({
                     targets: this.staminaBar,
-                    alpha: 0.3,
+                    alpha: 0.5,
                     duration: 400,
                     yoyo: true,
                     onComplete: () => {
@@ -344,7 +302,7 @@ export default class GameScene extends Phaser.Scene {
                 });
             }
         } else {
-            this.staminaBar.setFillStyle(0xFFFFFF, 0.8);
+            this.staminaBar.setAlpha(1);
         }
 
         // Current finger

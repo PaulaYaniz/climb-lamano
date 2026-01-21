@@ -17,11 +17,8 @@ export default class GameOverScene extends Phaser.Scene {
         const sky = this.add.rectangle(600, 400, 1200, 800, 0x87CEEB);
         sky.setAlpha(0.7);
 
-        // Victory banner (subtle)
-        const banner = this.add.rectangle(600, 150, 800, 100, 0xFFFFFF, 0.1);
-
-        const victoryText = this.add.text(600, 150, '¡CIMA CONQUISTADA!', {
-            fontSize: '42px',
+        const victoryText = this.add.text(600, 120, '¡CIMA CONQUISTADA!', {
+            fontSize: '48px',
             fontFamily: 'Arial',
             color: '#FFFFFF'
         }).setOrigin(0.5);
@@ -37,13 +34,9 @@ export default class GameOverScene extends Phaser.Scene {
             ease: 'Sine.easeInOut'
         });
 
-        // Stats container
-        const statsContainer = this.add.rectangle(600, 420, 700, 350, 0x000000, 0.3);
-        statsContainer.setStrokeStyle(1, 0xFFFFFF, 0.3);
-
         // Stats header
-        const statsHeader = this.add.text(600, 280, 'TU ESCALADA', {
-            fontSize: '28px',
+        const statsHeader = this.add.text(600, 240, 'TU ESCALADA', {
+            fontSize: '32px',
             fontFamily: 'Arial',
             color: '#FFFFFF'
         }).setOrigin(0.5);
@@ -71,29 +64,31 @@ export default class GameOverScene extends Phaser.Scene {
         ];
 
         stats.forEach((stat, index) => {
-            const y = 350 + index * 70;
+            const y = 320 + index * 80;
 
             const statText = this.add.text(
-                400,
+                600,
                 y,
-                `${stat.icon} ${stat.label}:`,
+                `${stat.icon} ${stat.label}`,
                 {
-                    fontSize: '20px',
+                    fontSize: '18px',
                     fontFamily: 'Arial',
-                    color: 'rgba(255, 255, 255, 0.9)'
+                    color: 'rgba(255, 255, 255, 0.8)',
+                    align: 'center'
                 }
-            );
+            ).setOrigin(0.5);
 
             const valueText = this.add.text(
-                800,
-                y,
+                600,
+                y + 30,
                 stat.value,
                 {
-                    fontSize: '24px',
+                    fontSize: '32px',
                     fontFamily: 'Arial',
-                    color: 'rgba(255, 255, 255, 0.9)'
+                    color: '#FFFFFF',
+                    align: 'center'
                 }
-            ).setOrigin(1, 0);
+            ).setOrigin(0.5);
 
             // Animate stats appearing
             statText.setAlpha(0);
@@ -110,22 +105,22 @@ export default class GameOverScene extends Phaser.Scene {
 
         // Star rating based on time
         const rating = this.calculateRating(this.time, this.height);
-        this.showStarRating(rating, 600, 540);
+        this.showStarRating(rating, 600, 590);
+
+        // Achievement message
+        const achievement = this.getAchievementMessage(this.finger, this.height, this.time);
+        const achievementText = this.add.text(600, 650, achievement, {
+            fontSize: '16px',
+            fontFamily: 'Arial',
+            color: 'rgba(255, 255, 255, 0.7)',
+            align: 'center'
+        }).setOrigin(0.5);
 
         // Buttons
         this.createButtons();
 
         // Confetti particles
         this.createConfetti();
-
-        // Achievement message
-        const achievement = this.getAchievementMessage(this.finger, this.height, this.time);
-        const achievementText = this.add.text(600, 620, achievement, {
-            fontSize: '18px',
-            fontFamily: 'Arial',
-            color: 'rgba(255, 255, 255, 0.8)',
-            align: 'center'
-        }).setOrigin(0.5);
     }
 
     calculateRating(time, height) {
@@ -174,22 +169,24 @@ export default class GameOverScene extends Phaser.Scene {
 
     createButtons() {
         // Play Again button
-        const playButton = this.add.rectangle(450, 710, 280, 60, 0xFFFFFF, 0.1);
-        playButton.setStrokeStyle(2, 0xFFFFFF, 0.5);
+        const playButton = this.add.rectangle(450, 730, 250, 55);
+        playButton.setStrokeStyle(3, 0xFFFFFF);
+        playButton.setFillStyle(0x000000, 0);
         playButton.setInteractive({ useHandCursor: true });
 
-        const playText = this.add.text(450, 710, 'JUGAR DE NUEVO', {
+        const playText = this.add.text(450, 730, 'JUGAR DE NUEVO', {
             fontSize: '18px',
             fontFamily: 'Arial',
             color: '#FFFFFF'
         }).setOrigin(0.5);
 
         // Main Menu button
-        const menuButton = this.add.rectangle(750, 710, 280, 60, 0xFFFFFF, 0.1);
-        menuButton.setStrokeStyle(2, 0xFFFFFF, 0.5);
+        const menuButton = this.add.rectangle(750, 730, 250, 55);
+        menuButton.setStrokeStyle(3, 0xFFFFFF);
+        menuButton.setFillStyle(0x000000, 0);
         menuButton.setInteractive({ useHandCursor: true });
 
-        const menuText = this.add.text(750, 710, 'MENÚ PRINCIPAL', {
+        const menuText = this.add.text(750, 730, 'MENÚ PRINCIPAL', {
             fontSize: '18px',
             fontFamily: 'Arial',
             color: '#FFFFFF'
@@ -197,22 +194,24 @@ export default class GameOverScene extends Phaser.Scene {
 
         // Play Again hover
         playButton.on('pointerover', () => {
-            playButton.setFillStyle(0xFFFFFF, 0.2);
+            playButton.setFillStyle(0xFFFFFF, 1);
+            playText.setColor('#000000');
             this.tweens.add({
                 targets: [playButton, playText],
                 scaleX: 1.05,
                 scaleY: 1.05,
-                duration: 200
+                duration: 150
             });
         });
 
         playButton.on('pointerout', () => {
-            playButton.setFillStyle(0xFFFFFF, 0.1);
+            playButton.setFillStyle(0x000000, 0);
+            playText.setColor('#FFFFFF');
             this.tweens.add({
                 targets: [playButton, playText],
                 scaleX: 1,
                 scaleY: 1,
-                duration: 200
+                duration: 150
             });
         });
 
@@ -225,22 +224,24 @@ export default class GameOverScene extends Phaser.Scene {
 
         // Menu hover
         menuButton.on('pointerover', () => {
-            menuButton.setFillStyle(0xFFFFFF, 0.2);
+            menuButton.setFillStyle(0xFFFFFF, 1);
+            menuText.setColor('#000000');
             this.tweens.add({
                 targets: [menuButton, menuText],
                 scaleX: 1.05,
                 scaleY: 1.05,
-                duration: 200
+                duration: 150
             });
         });
 
         menuButton.on('pointerout', () => {
-            menuButton.setFillStyle(0xFFFFFF, 0.1);
+            menuButton.setFillStyle(0x000000, 0);
+            menuText.setColor('#FFFFFF');
             this.tweens.add({
                 targets: [menuButton, menuText],
                 scaleX: 1,
                 scaleY: 1,
-                duration: 200
+                duration: 150
             });
         });
 
