@@ -16,7 +16,7 @@ export default class Climber {
         this.body.setCollideWorldBounds(true);
         this.body.setDrag(300, 0);
         this.body.setMaxVelocity(400, 600);
-        this.body.setGravityY(0); // Use world gravity
+        // Let world gravity apply (800 from config)
         this.body.setBounce(0, 0);
 
         // Climbing state
@@ -121,8 +121,8 @@ export default class Climber {
                 this.currentHold = null;
             }
 
-            // Enable gravity when not grabbing
-            this.body.setGravityY(0); // Use world gravity
+            // Reset to normal when not grabbing - let world gravity apply
+            this.body.setGravityY(0); // Reset body gravity to allow world gravity
             this.body.setDrag(300, 0);
         }
     }
@@ -131,6 +131,15 @@ export default class Climber {
         // Horizontal movement - always works (arrow keys or A/D)
         const leftPressed = this.cursors.left.isDown || this.wasdKeys.A.isDown;
         const rightPressed = this.cursors.right.isDown || this.wasdKeys.D.isDown;
+        const upPressed = this.cursors.up.isDown || this.wasdKeys.W.isDown;
+        const downPressed = this.cursors.down.isDown || this.wasdKeys.S.isDown;
+
+        // DEBUG: Log movement state
+        if (leftPressed || rightPressed || upPressed || downPressed) {
+            console.log('Input:', { left: leftPressed, right: rightPressed, up: upPressed, down: downPressed });
+            console.log('Velocity before:', { x: this.body.velocity.x, y: this.body.velocity.y });
+            console.log('Position:', { x: this.sprite.x, y: this.sprite.y });
+        }
         
         if (leftPressed) {
             this.body.velocity.x = -this.moveSpeed;
@@ -141,9 +150,7 @@ export default class Climber {
             this.body.velocity.x = 0;
         }
 
-        // Vertical movement - always works (arrow keys or W/S)
-        const upPressed = this.cursors.up.isDown || this.wasdKeys.W.isDown;
-        const downPressed = this.cursors.down.isDown || this.wasdKeys.S.isDown;
+        // Vertical movement - already declared above
 
         if (upPressed) {
             if (this.isGrabbing && this.stamina > 1) {
