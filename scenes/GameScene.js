@@ -104,7 +104,7 @@ export default class GameScene extends Phaser.Scene {
 
         // Controls section
         let yPos = 120;
-        this.add.text(panelX, yPos, 'CONTROLS', {
+        this.add.text(panelX, yPos, 'CONTROLES', {
             fontSize: '18px',
             fontFamily: 'Arial',
             color: '#F39C12',
@@ -112,26 +112,26 @@ export default class GameScene extends Phaser.Scene {
         }).setOrigin(0.5);
 
         yPos += 40;
-        this.add.text(panelX - 90, yPos, 'ARROWS', {
+        this.add.text(panelX - 90, yPos, 'FLECHAS', {
             fontSize: '16px',
             fontFamily: 'Arial',
             color: '#ECF0F1',
             fontStyle: 'bold'
         });
-        this.add.text(panelX - 20, yPos, 'Move in any direction', {
+        this.add.text(panelX - 20, yPos, 'Muévete en cualquier dirección', {
             fontSize: '14px',
             fontFamily: 'Arial',
             color: '#BDC3C7'
         });
 
         yPos += 35;
-        this.add.text(panelX - 90, yPos, 'SPACE', {
+        this.add.text(panelX - 90, yPos, 'ESPACIO', {
             fontSize: '16px',
             fontFamily: 'Arial',
             color: '#ECF0F1',
             fontStyle: 'bold'
         });
-        this.add.text(panelX - 20, yPos, 'Hold near circle', {
+        this.add.text(panelX - 20, yPos, 'Mantén cerca del círculo', {
             fontSize: '14px',
             fontFamily: 'Arial',
             color: '#BDC3C7'
@@ -139,21 +139,21 @@ export default class GameScene extends Phaser.Scene {
 
         // Tip
         yPos += 30;
-        this.add.text(panelX, yPos, 'Use arrows to fly', {
+        this.add.text(panelX, yPos, 'Usa las flechas para volar', {
             fontSize: '12px',
             fontFamily: 'Arial',
             color: '#95A5A6',
             align: 'center'
         }).setOrigin(0.5);
         yPos += 18;
-        this.add.text(panelX, yPos, 'Hold SPACE near circles', {
+        this.add.text(panelX, yPos, 'Mantén ESPACIO cerca de los círculos', {
             fontSize: '12px',
             fontFamily: 'Arial',
             color: '#95A5A6',
             align: 'center'
         }).setOrigin(0.5);
         yPos += 18;
-        this.add.text(panelX, yPos, 'to grab and rest!', {
+        this.add.text(panelX, yPos, '¡para agarrar y descansar!', {
             fontSize: '12px',
             fontFamily: 'Arial',
             color: '#95A5A6',
@@ -166,7 +166,7 @@ export default class GameScene extends Phaser.Scene {
 
         // Stamina section
         yPos += 30;
-        this.add.text(panelX, yPos, 'STAMINA', {
+        this.add.text(panelX, yPos, 'RESISTENCIA', {
             fontSize: '18px',
             fontFamily: 'Arial',
             color: '#F39C12',
@@ -210,7 +210,7 @@ export default class GameScene extends Phaser.Scene {
 
         // Stats section
         yPos += 30;
-        this.add.text(panelX, yPos, 'STATS', {
+        this.add.text(panelX, yPos, 'ESTADÍSTICAS', {
             fontSize: '18px',
             fontFamily: 'Arial',
             color: '#F39C12',
@@ -218,21 +218,21 @@ export default class GameScene extends Phaser.Scene {
         }).setOrigin(0.5);
 
         yPos += 40;
-        this.heightText = this.add.text(panelX, yPos, 'Height: 0m', {
+        this.heightText = this.add.text(panelX, yPos, 'Altura: 0m', {
             fontSize: '16px',
             fontFamily: 'Arial',
             color: '#ECF0F1'
         }).setOrigin(0.5);
 
         yPos += 35;
-        this.timerText = this.add.text(panelX, yPos, 'Time: 0:00', {
+        this.timerText = this.add.text(panelX, yPos, 'Tiempo: 0:00', {
             fontSize: '16px',
             fontFamily: 'Arial',
             color: '#ECF0F1'
         }).setOrigin(0.5);
 
         yPos += 35;
-        this.fingerText = this.add.text(panelX, yPos, 'Position: Palm', {
+        this.fingerText = this.add.text(panelX, yPos, 'Posición: Palma', {
             fontSize: '16px',
             fontFamily: 'Arial',
             color: '#ECF0F1'
@@ -252,7 +252,7 @@ export default class GameScene extends Phaser.Scene {
 
         // Goal section
         yPos += 30;
-        this.add.text(panelX, yPos, 'GOAL', {
+        this.add.text(panelX, yPos, 'OBJETIVO', {
             fontSize: '18px',
             fontFamily: 'Arial',
             color: '#F39C12',
@@ -260,14 +260,14 @@ export default class GameScene extends Phaser.Scene {
         }).setOrigin(0.5);
 
         yPos += 35;
-        this.add.text(panelX, yPos, '🚩 Reach any', {
+        this.add.text(panelX, yPos, '🚩 Alcanza cualquier', {
             fontSize: '16px',
             fontFamily: 'Arial',
             color: '#ECF0F1'
         }).setOrigin(0.5);
 
         yPos += 30;
-        this.add.text(panelX, yPos, 'fingertip flag!', {
+        this.add.text(panelX, yPos, '¡bandera en la punta del dedo!', {
             fontSize: '16px',
             fontFamily: 'Arial',
             color: '#ECF0F1'
@@ -326,7 +326,7 @@ export default class GameScene extends Phaser.Scene {
     updateHUD(climberState) {
         // Height
         const height = this.climber.getHeight();
-        this.heightText.setText(`Height: ${height}m`);
+        this.heightText.setText(`Altura: ${height}m`);
 
         // Stamina bar
         const stamina = this.climber.getStamina();
@@ -363,14 +363,14 @@ export default class GameScene extends Phaser.Scene {
 
         // Current finger
         const currentFinger = this.climber.getCurrentFinger(this.handWall.getHolds());
-        this.fingerText.setText(`Position: ${currentFinger}`);
+        this.fingerText.setText(`Posición: ${currentFinger}`);
 
         // Grab indicator
         if (climberState.nearestHold && !climberState.isGrabbing) {
-            this.grabIndicator.setText('✓ Hold nearby!');
+            this.grabIndicator.setText('✓ ¡Agarre cerca!');
             this.grabIndicator.setColor('#2ecc71');
         } else if (climberState.isGrabbing) {
-            this.grabIndicator.setText('⚡ GRABBING');
+            this.grabIndicator.setText('⚡ AGARRADO');
             this.grabIndicator.setColor('#f39c12');
         } else {
             this.grabIndicator.setText('');
@@ -383,7 +383,7 @@ export default class GameScene extends Phaser.Scene {
         this.gameTime++;
         const minutes = Math.floor(this.gameTime / 60);
         const seconds = this.gameTime % 60;
-        this.timerText.setText(`Time: ${minutes}:${seconds.toString().padStart(2, '0')}`);
+        this.timerText.setText(`Tiempo: ${minutes}:${seconds.toString().padStart(2, '0')}`);
     }
 
     winGame(goal) {
@@ -437,7 +437,7 @@ export default class GameScene extends Phaser.Scene {
         }
 
         // Victory text
-        const victoryText = this.add.text(600, 300, '🎉 SUMMIT REACHED! 🎉', {
+        const victoryText = this.add.text(600, 300, '🎉 ¡CIMA ALCANZADA! 🎉', {
             fontSize: '48px',
             fontFamily: 'Arial',
             color: '#FFD700',

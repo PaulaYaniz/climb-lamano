@@ -21,7 +21,7 @@ export default class GameOverScene extends Phaser.Scene {
         const banner = this.add.rectangle(600, 150, 800, 120, 0xFFD700);
         banner.setStrokeStyle(6, 0xDAA520);
 
-        const victoryText = this.add.text(600, 150, '🎉 SUMMIT CONQUERED! 🎉', {
+        const victoryText = this.add.text(600, 150, '🎉 ¡CIMA CONQUISTADA! 🎉', {
             fontSize: '48px',
             fontFamily: 'Arial',
             color: '#8B4513',
@@ -47,7 +47,7 @@ export default class GameOverScene extends Phaser.Scene {
         statsContainer.setAlpha(0.95);
 
         // Stats header
-        const statsHeader = this.add.text(600, 280, 'YOUR CLIMB', {
+        const statsHeader = this.add.text(600, 280, 'TU ESCALADA', {
             fontSize: '36px',
             fontFamily: 'Arial',
             color: '#8B4513',
@@ -71,9 +71,9 @@ export default class GameOverScene extends Phaser.Scene {
 
         // Individual stats
         const stats = [
-            { icon: fingerEmoji, label: 'Finger Conquered', value: this.finger.toUpperCase() },
-            { icon: '⛰️', label: 'Height Reached', value: `${this.height}m` },
-            { icon: '⏱️', label: 'Time', value: timeStr }
+            { icon: fingerEmoji, label: 'Dedo Conquistado', value: this.finger.toUpperCase() },
+            { icon: '⛰️', label: 'Altura Alcanzada', value: `${this.height}m` },
+            { icon: '⏱️', label: 'Tiempo', value: timeStr }
         ];
 
         stats.forEach((stat, index) => {
@@ -171,14 +171,14 @@ export default class GameOverScene extends Phaser.Scene {
 
     getAchievementMessage(finger, height, time) {
         const messages = {
-            thumb: "The Hitchhiker's Guide to Victory!",
-            index: "You're Number One!",
-            middle: "Standing Tall at the Top!",
-            ring: "You've Earned This Victory!",
-            pinky: "Small but Mighty Climber!"
+            thumb: "¡La Guía del Auto-stopista hacia la Victoria!",
+            index: "¡Eres el Número Uno!",
+            middle: "¡De Pie en lo Más Alto!",
+            ring: "¡Te Has Ganado Esta Victoria!",
+            pinky: "¡Escalador Pequeño pero Poderoso!"
         };
 
-        return messages[finger.toLowerCase()] || "Incredible Climb!";
+        return messages[finger.toLowerCase()] || "¡Escalada Increíble!";
     }
 
     createButtons() {
@@ -187,7 +187,7 @@ export default class GameOverScene extends Phaser.Scene {
         playButton.setStrokeStyle(4, 0x922b21);
         playButton.setInteractive({ useHandCursor: true });
 
-        const playText = this.add.text(450, 710, '🔄 CLIMB AGAIN', {
+        const playText = this.add.text(450, 710, '🔄 ESCALAR DE NUEVO', {
             fontSize: '22px',
             fontFamily: 'Arial',
             color: '#ffffff',
@@ -199,7 +199,7 @@ export default class GameOverScene extends Phaser.Scene {
         menuButton.setStrokeStyle(4, 0x2980b9);
         menuButton.setInteractive({ useHandCursor: true });
 
-        const menuText = this.add.text(750, 710, '🏠 MAIN MENU', {
+        const menuText = this.add.text(750, 710, '🏠 MENÚ PRINCIPAL', {
             fontSize: '22px',
             fontFamily: 'Arial',
             color: '#ffffff',

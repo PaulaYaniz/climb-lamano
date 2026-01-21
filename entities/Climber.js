@@ -273,12 +273,23 @@ export default class Climber {
 
     getCurrentFinger(holds) {
         if (!this.currentHold) {
-            if (this.sprite.y > 600) return 'Palm';
-            return 'Between';
+            if (this.sprite.y > 600) return 'Palma';
+            return 'Entre';
         }
 
         const fingerName = this.currentHold.finger;
-        return fingerName.charAt(0).toUpperCase() + fingerName.slice(1);
+        const fingerTranslations = {
+            'thumb': 'Pulgar',
+            'index': 'Índice',
+            'middle': 'Medio',
+            'ring': 'Anular',
+            'pinky': 'Meñique',
+            'palm': 'Palma',
+            'start': 'Inicio',
+            'ground': 'Suelo',
+            'between': 'Entre'
+        };
+        return fingerTranslations[fingerName.toLowerCase()] || fingerName.charAt(0).toUpperCase() + fingerName.slice(1);
     }
 
     checkGoalCollision(goals) {

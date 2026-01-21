@@ -54,7 +54,7 @@ export default class MenuScene extends Phaser.Scene {
         });
 
         // Subtitle
-        const subtitle = this.add.text(700, 180, 'Giant Hand Climbing Challenge', {
+        const subtitle = this.add.text(700, 180, 'Desafío de Escalada en Mano Gigante', {
             fontSize: '28px',
             fontFamily: 'Arial',
             color: '#654321',
@@ -65,7 +65,7 @@ export default class MenuScene extends Phaser.Scene {
         const leftPanel = this.add.rectangle(300, 450, 480, 520, 0x2C3E50, 0.9);
         leftPanel.setStrokeStyle(5, 0x34495E);
 
-        this.add.text(300, 250, 'THE CHALLENGE', {
+        this.add.text(300, 250, 'EL DESAFÍO', {
             fontSize: '24px',
             fontFamily: 'Arial',
             color: '#ECF0F1',
@@ -91,7 +91,7 @@ export default class MenuScene extends Phaser.Scene {
             ease: 'Sine.easeInOut'
         });
 
-        this.add.text(300, 650, 'Climb the giant hand\nto reach the top!', {
+        this.add.text(300, 650, '¡Escala la mano gigante\npara llegar a la cima!', {
             fontSize: '18px',
             fontFamily: 'Arial',
             color: '#ECF0F1',
@@ -103,7 +103,7 @@ export default class MenuScene extends Phaser.Scene {
         const rightPanel = this.add.rectangle(900, 450, 680, 520, 0x2C3E50, 0.9);
         rightPanel.setStrokeStyle(5, 0x34495E);
 
-        this.add.text(900, 250, 'HOW TO PLAY', {
+        this.add.text(900, 250, 'CÓMO JUGAR', {
             fontSize: '24px',
             fontFamily: 'Arial',
             color: '#ECF0F1',
@@ -120,13 +120,13 @@ export default class MenuScene extends Phaser.Scene {
             color: '#F39C12',
             fontStyle: 'bold'
         }).setOrigin(0.5);
-        this.add.text(750, yPos + 10, 'USE ARROW KEYS', {
+        this.add.text(750, yPos + 10, 'USA LAS FLECHAS', {
             fontSize: '20px',
             fontFamily: 'Arial',
             color: '#ECF0F1',
             fontStyle: 'bold'
         }).setOrigin(0, 0.5);
-        this.add.text(750, yPos + 35, 'Move ↑ ↓ ← → in any direction', {
+        this.add.text(750, yPos + 35, 'Muévete ↑ ↓ ← → en cualquier dirección', {
             fontSize: '16px',
             fontFamily: 'Arial',
             color: '#BDC3C7'
@@ -142,13 +142,13 @@ export default class MenuScene extends Phaser.Scene {
             color: '#F39C12',
             fontStyle: 'bold'
         }).setOrigin(0.5);
-        this.add.text(750, yPos + 10, 'HOLD SPACE TO GRAB', {
+        this.add.text(750, yPos + 10, 'MANTÉN ESPACIO PARA AGARRAR', {
             fontSize: '20px',
             fontFamily: 'Arial',
             color: '#ECF0F1',
             fontStyle: 'bold'
         }).setOrigin(0, 0.5);
-        this.add.text(750, yPos + 35, 'Near red circles to hold on', {
+        this.add.text(750, yPos + 35, 'Cerca de los círculos rojos para sujetarte', {
             fontSize: '16px',
             fontFamily: 'Arial',
             color: '#BDC3C7'
@@ -164,13 +164,13 @@ export default class MenuScene extends Phaser.Scene {
             color: '#F39C12',
             fontStyle: 'bold'
         }).setOrigin(0.5);
-        this.add.text(750, yPos + 10, 'REST & RECOVER', {
+        this.add.text(750, yPos + 10, 'DESCANSA Y RECUPÉRATE', {
             fontSize: '20px',
             fontFamily: 'Arial',
             color: '#ECF0F1',
             fontStyle: 'bold'
         }).setOrigin(0, 0.5);
-        this.add.text(750, yPos + 35, 'Stamina recovers when not climbing', {
+        this.add.text(750, yPos + 35, 'La resistencia se recupera cuando no escalas', {
             fontSize: '16px',
             fontFamily: 'Arial',
             color: '#BDC3C7'
@@ -186,13 +186,13 @@ export default class MenuScene extends Phaser.Scene {
             color: '#F39C12',
             fontStyle: 'bold'
         }).setOrigin(0.5);
-        this.add.text(750, yPos + 10, 'REACH THE TOP!', {
+        this.add.text(750, yPos + 10, '¡LLEGA A LA CIMA!', {
             fontSize: '20px',
             fontFamily: 'Arial',
             color: '#ECF0F1',
             fontStyle: 'bold'
         }).setOrigin(0, 0.5);
-        this.add.text(750, yPos + 35, 'Get to any golden flag 🚩', {
+        this.add.text(750, yPos + 35, 'Llega a cualquier bandera dorada 🚩', {
             fontSize: '16px',
             fontFamily: 'Arial',
             color: '#BDC3C7'
@@ -203,7 +203,7 @@ export default class MenuScene extends Phaser.Scene {
         startButton.setStrokeStyle(5, 0x922b21);
         startButton.setInteractive({ useHandCursor: true });
 
-        const startText = this.add.text(700, 730, '🚀 START CLIMBING', {
+        const startText = this.add.text(700, 730, '🚀 COMENZAR A ESCALAR', {
             fontSize: '32px',
             fontFamily: 'Arial',
             color: '#ffffff',
@@ -241,7 +241,7 @@ export default class MenuScene extends Phaser.Scene {
         });
 
         // Keyboard shortcut hint
-        this.add.text(700, 785, 'Press SPACE to start', {
+        this.add.text(700, 785, 'Presiona ESPACIO para comenzar', {
             fontSize: '16px',
             fontFamily: 'Arial',
             color: '#95A5A6',
