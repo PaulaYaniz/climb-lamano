@@ -150,7 +150,8 @@ export default class HandWall {
                 x: pos.x,
                 y: pos.y,
                 size: holdSize,
-                originalScale: 1
+                originalScale: 1,
+                originalColor: color
             });
         });
     }
@@ -185,7 +186,8 @@ export default class HandWall {
                 x: pos.x,
                 y: pos.y,
                 size: holdSize,
-                originalScale: 1
+                originalScale: 1,
+                originalColor: color
             });
         });
 
@@ -256,7 +258,7 @@ export default class HandWall {
                 duration: 100,
                 ease: 'Power2'
             });
-            hold.sprite.setTint(0xFFD700);
+            hold.sprite.setFillStyle(0xFFD700);
         } else {
             // Just nearby - pulse
             this.scene.tweens.add({
@@ -281,7 +283,8 @@ export default class HandWall {
             duration: 200,
             ease: 'Power2'
         });
-        hold.sprite.clearTint();
+        // Restore original color for circles
+        hold.sprite.setFillStyle(hold.originalColor);
     }
 
     update() {
