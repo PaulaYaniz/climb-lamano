@@ -33,13 +33,10 @@ export default class MenuScene extends Phaser.Scene {
         }
 
         // Title
-        const title = this.add.text(700, 100, '🧗 LA MANO 🧗', {
-            fontSize: '84px',
+        const title = this.add.text(700, 100, 'LA MANO', {
+            fontSize: '72px',
             fontFamily: 'Arial',
-            color: '#8B4513',
-            fontStyle: 'bold',
-            stroke: '#654321',
-            strokeThickness: 10
+            color: '#FFFFFF'
         }).setOrigin(0.5);
 
         // Title animation
@@ -54,22 +51,19 @@ export default class MenuScene extends Phaser.Scene {
         });
 
         // Subtitle
-        const subtitle = this.add.text(700, 180, 'Desafío de Escalada en Mano Gigante', {
-            fontSize: '28px',
+        const subtitle = this.add.text(700, 170, 'Juego de escalada', {
+            fontSize: '20px',
             fontFamily: 'Arial',
-            color: '#654321',
-            fontStyle: 'italic'
+            color: 'rgba(255, 255, 255, 0.7)'
         }).setOrigin(0.5);
 
         // Left panel - Hand preview
-        const leftPanel = this.add.rectangle(300, 450, 480, 520, 0x2C3E50, 0.9);
-        leftPanel.setStrokeStyle(5, 0x34495E);
+        const leftPanel = this.add.rectangle(300, 450, 480, 520, 0x000000, 0.3);
 
         this.add.text(300, 250, 'EL DESAFÍO', {
-            fontSize: '24px',
+            fontSize: '18px',
             fontFamily: 'Arial',
-            color: '#ECF0F1',
-            fontStyle: 'bold'
+            color: '#FFFFFF'
         }).setOrigin(0.5);
 
         // Hand preview image
@@ -100,130 +94,115 @@ export default class MenuScene extends Phaser.Scene {
         }).setOrigin(0.5);
 
         // Right panel - Instructions
-        const rightPanel = this.add.rectangle(900, 450, 680, 520, 0x2C3E50, 0.9);
-        rightPanel.setStrokeStyle(5, 0x34495E);
+        const rightPanel = this.add.rectangle(900, 450, 680, 520, 0x000000, 0.3);
 
         this.add.text(900, 250, 'CÓMO JUGAR', {
-            fontSize: '24px',
+            fontSize: '20px',
             fontFamily: 'Arial',
-            color: '#ECF0F1',
-            fontStyle: 'bold'
+            color: '#FFFFFF'
         }).setOrigin(0.5);
 
         let yPos = 300;
 
         // Step 1
-        this.add.rectangle(900, yPos + 30, 600, 80, 0x34495E, 0.5);
         this.add.text(650, yPos, '1', {
-            fontSize: '32px',
+            fontSize: '28px',
             fontFamily: 'Arial',
-            color: '#F39C12',
-            fontStyle: 'bold'
+            color: 'rgba(255, 255, 255, 0.6)'
         }).setOrigin(0.5);
         this.add.text(750, yPos + 10, 'SUELTA ESPACIO Y USA FLECHAS', {
-            fontSize: '20px',
+            fontSize: '18px',
             fontFamily: 'Arial',
-            color: '#ECF0F1',
-            fontStyle: 'bold'
+            color: 'rgba(255, 255, 255, 0.9)'
         }).setOrigin(0, 0.5);
         this.add.text(750, yPos + 35, 'Muévete ↑ ↓ ← → solo al soltar espacio', {
-            fontSize: '16px',
+            fontSize: '15px',
             fontFamily: 'Arial',
-            color: '#BDC3C7'
+            color: 'rgba(255, 255, 255, 0.7)'
         }).setOrigin(0, 0.5);
 
         yPos += 100;
 
         // Step 2
-        this.add.rectangle(900, yPos + 30, 600, 80, 0x34495E, 0.5);
         this.add.text(650, yPos, '2', {
-            fontSize: '32px',
+            fontSize: '28px',
             fontFamily: 'Arial',
-            color: '#F39C12',
-            fontStyle: 'bold'
+            color: 'rgba(255, 255, 255, 0.6)'
         }).setOrigin(0.5);
         this.add.text(750, yPos + 10, 'MANTÉN ESPACIO PARA CONGELAR', {
-            fontSize: '20px',
+            fontSize: '18px',
             fontFamily: 'Arial',
-            color: '#ECF0F1',
-            fontStyle: 'bold'
+            color: 'rgba(255, 255, 255, 0.9)'
         }).setOrigin(0, 0.5);
         this.add.text(750, yPos + 35, 'Detén tu caída y mantén posición', {
-            fontSize: '16px',
+            fontSize: '15px',
             fontFamily: 'Arial',
-            color: '#BDC3C7'
+            color: 'rgba(255, 255, 255, 0.7)'
         }).setOrigin(0, 0.5);
 
         yPos += 100;
 
         // Step 3
-        this.add.rectangle(900, yPos + 30, 600, 80, 0x34495E, 0.5);
         this.add.text(650, yPos, '3', {
-            fontSize: '32px',
+            fontSize: '28px',
             fontFamily: 'Arial',
-            color: '#F39C12',
-            fontStyle: 'bold'
+            color: 'rgba(255, 255, 255, 0.6)'
         }).setOrigin(0.5);
         this.add.text(750, yPos + 10, 'SUELTA PARA RECUPERAR', {
-            fontSize: '20px',
+            fontSize: '18px',
             fontFamily: 'Arial',
-            color: '#ECF0F1',
-            fontStyle: 'bold'
+            color: 'rgba(255, 255, 255, 0.9)'
         }).setOrigin(0, 0.5);
         this.add.text(750, yPos + 35, 'Resistencia se recupera al soltar espacio', {
-            fontSize: '16px',
+            fontSize: '15px',
             fontFamily: 'Arial',
-            color: '#BDC3C7'
+            color: 'rgba(255, 255, 255, 0.7)'
         }).setOrigin(0, 0.5);
 
         yPos += 100;
 
         // Step 4
-        this.add.rectangle(900, yPos + 30, 600, 80, 0x34495E, 0.5);
         this.add.text(650, yPos, '4', {
-            fontSize: '32px',
+            fontSize: '28px',
             fontFamily: 'Arial',
-            color: '#F39C12',
-            fontStyle: 'bold'
+            color: 'rgba(255, 255, 255, 0.6)'
         }).setOrigin(0.5);
         this.add.text(750, yPos + 10, '¡LLEGA A LA CIMA!', {
-            fontSize: '20px',
+            fontSize: '18px',
             fontFamily: 'Arial',
-            color: '#ECF0F1',
-            fontStyle: 'bold'
+            color: 'rgba(255, 255, 255, 0.9)'
         }).setOrigin(0, 0.5);
         this.add.text(750, yPos + 35, 'Llega a cualquier bandera dorada 🚩', {
-            fontSize: '16px',
+            fontSize: '15px',
             fontFamily: 'Arial',
-            color: '#BDC3C7'
+            color: 'rgba(255, 255, 255, 0.7)'
         }).setOrigin(0, 0.5);
 
         // Start button
-        const startButton = this.add.rectangle(700, 730, 400, 80, 0xe74c3c);
-        startButton.setStrokeStyle(5, 0x922b21);
+        const startButton = this.add.rectangle(700, 730, 400, 70, 0xFFFFFF, 0.1);
+        startButton.setStrokeStyle(2, 0xFFFFFF, 0.5);
         startButton.setInteractive({ useHandCursor: true });
 
-        const startText = this.add.text(700, 730, '🚀 COMENZAR A ESCALAR', {
-            fontSize: '32px',
+        const startText = this.add.text(700, 730, 'COMENZAR', {
+            fontSize: '24px',
             fontFamily: 'Arial',
-            color: '#ffffff',
-            fontStyle: 'bold'
+            color: '#FFFFFF'
         }).setOrigin(0.5);
 
         // Button hover effects
         startButton.on('pointerover', () => {
-            startButton.setFillStyle(0xc0392b);
+            startButton.setFillStyle(0xFFFFFF, 0.2);
             this.tweens.add({
                 targets: [startButton, startText],
-                scaleX: 1.08,
-                scaleY: 1.08,
+                scaleX: 1.05,
+                scaleY: 1.05,
                 duration: 200,
                 ease: 'Power2'
             });
         });
 
         startButton.on('pointerout', () => {
-            startButton.setFillStyle(0xe74c3c);
+            startButton.setFillStyle(0xFFFFFF, 0.1);
             this.tweens.add({
                 targets: [startButton, startText],
                 scaleX: 1,
@@ -242,10 +221,9 @@ export default class MenuScene extends Phaser.Scene {
 
         // Keyboard shortcut hint
         this.add.text(700, 785, 'Presiona ESPACIO para comenzar', {
-            fontSize: '16px',
+            fontSize: '14px',
             fontFamily: 'Arial',
-            color: '#95A5A6',
-            fontStyle: 'italic'
+            color: 'rgba(255, 255, 255, 0.5)'
         }).setOrigin(0.5);
 
         // Keyboard shortcut

@@ -88,89 +88,83 @@ export default class GameScene extends Phaser.Scene {
         const panelWidth = 240;
 
         // Side panel background
-        const panel = this.add.rectangle(panelX, 400, panelWidth, 800, 0x2C3E50, 0.9);
-        panel.setStrokeStyle(4, 0x34495E);
+        const panel = this.add.rectangle(panelX, 400, panelWidth, 800, 0x000000, 0.25);
 
         // Title
-        this.add.text(panelX, 50, 'CLIMB LA MANO', {
-            fontSize: '24px',
+        this.add.text(panelX, 50, 'LA MANO', {
+            fontSize: '20px',
             fontFamily: 'Arial',
-            color: '#ECF0F1',
-            fontStyle: 'bold'
+            color: '#FFFFFF'
         }).setOrigin(0.5);
 
         // Divider
-        this.add.rectangle(panelX, 80, 200, 2, 0x95A5A6);
+        this.add.rectangle(panelX, 80, 200, 1, 0xFFFFFF, 0.2);
 
         // Controls section
         let yPos = 120;
         this.add.text(panelX, yPos, 'CONTROLES', {
-            fontSize: '18px',
+            fontSize: '14px',
             fontFamily: 'Arial',
-            color: '#F39C12',
-            fontStyle: 'bold'
+            color: 'rgba(255, 255, 255, 0.8)'
         }).setOrigin(0.5);
 
         yPos += 40;
         this.add.text(panelX - 90, yPos, 'FLECHAS', {
-            fontSize: '16px',
-            fontFamily: 'Arial',
-            color: '#ECF0F1',
-            fontStyle: 'bold'
-        });
-        this.add.text(panelX - 20, yPos, 'Muévete en cualquier dirección', {
             fontSize: '14px',
             fontFamily: 'Arial',
-            color: '#BDC3C7'
+            color: 'rgba(255, 255, 255, 0.9)'
+        });
+        this.add.text(panelX - 20, yPos, 'Muévete en cualquier dirección', {
+            fontSize: '12px',
+            fontFamily: 'Arial',
+            color: 'rgba(255, 255, 255, 0.7)'
         });
 
         yPos += 35;
         this.add.text(panelX - 90, yPos, 'ESPACIO', {
-            fontSize: '16px',
-            fontFamily: 'Arial',
-            color: '#ECF0F1',
-            fontStyle: 'bold'
-        });
-        this.add.text(panelX - 20, yPos, 'Mantén para congelarte', {
             fontSize: '14px',
             fontFamily: 'Arial',
-            color: '#BDC3C7'
+            color: 'rgba(255, 255, 255, 0.9)'
+        });
+        this.add.text(panelX - 20, yPos, 'Mantén para congelarte', {
+            fontSize: '12px',
+            fontFamily: 'Arial',
+            color: 'rgba(255, 255, 255, 0.7)'
         });
 
         // Tip
         yPos += 30;
         this.add.text(panelX, yPos, 'Suelta ESPACIO para moverte', {
-            fontSize: '12px',
+            fontSize: '11px',
             fontFamily: 'Arial',
-            color: '#95A5A6',
+            color: 'rgba(255, 255, 255, 0.5)',
             align: 'center'
         }).setOrigin(0.5);
         yPos += 18;
         this.add.text(panelX, yPos, 'Mantén ESPACIO para congelar', {
-            fontSize: '12px',
+            fontSize: '11px',
             fontFamily: 'Arial',
-            color: '#95A5A6',
+            color: 'rgba(255, 255, 255, 0.5)',
             align: 'center'
         }).setOrigin(0.5);
         yPos += 18;
         this.add.text(panelX, yPos, '¡Escala rápido antes de caer!', {
-            fontSize: '12px',
+            fontSize: '11px',
             fontFamily: 'Arial',
-            color: '#95A5A6',
+            color: 'rgba(255, 255, 255, 0.5)',
             align: 'center'
         }).setOrigin(0.5);
 
         // Divider
         yPos += 25;
-        this.add.rectangle(panelX, yPos, 200, 2, 0x95A5A6);
+        this.add.rectangle(panelX, yPos, 200, 1, 0xFFFFFF, 0.2);
 
         // Stamina section
         yPos += 30;
         this.add.text(panelX, yPos, 'RESISTENCIA', {
-            fontSize: '18px',
+            fontSize: '14px',
             fontFamily: 'Arial',
-            color: '#F39C12',
-            fontStyle: 'bold'
+            color: 'rgba(255, 255, 255, 0.8)'
         }).setOrigin(0.5);
 
         yPos += 40;
@@ -182,95 +176,92 @@ export default class GameScene extends Phaser.Scene {
             yPos,
             staminaWidth,
             staminaHeight,
-            0x34495E
+            0xFFFFFF,
+            0.2
         );
-        this.staminaBg.setStrokeStyle(3, 0x7F8C8D);
 
         this.staminaBar = this.add.rectangle(
             panelX - staminaWidth / 2,
             yPos,
             staminaWidth,
             staminaHeight,
-            0x2ecc71
+            0xFFFFFF,
+            0.8
         );
         this.staminaBar.setOrigin(0, 0.5);
 
         // Stamina percentage text
         yPos += 30;
         this.staminaText = this.add.text(panelX, yPos, '100%', {
-            fontSize: '20px',
+            fontSize: '16px',
             fontFamily: 'Arial',
-            color: '#ECF0F1',
-            fontStyle: 'bold'
+            color: 'rgba(255, 255, 255, 0.9)'
         }).setOrigin(0.5);
 
         // Divider
         yPos += 40;
-        this.add.rectangle(panelX, yPos, 200, 2, 0x95A5A6);
+        this.add.rectangle(panelX, yPos, 200, 1, 0xFFFFFF, 0.2);
 
         // Stats section
         yPos += 30;
         this.add.text(panelX, yPos, 'ESTADÍSTICAS', {
-            fontSize: '18px',
+            fontSize: '14px',
             fontFamily: 'Arial',
-            color: '#F39C12',
-            fontStyle: 'bold'
+            color: 'rgba(255, 255, 255, 0.8)'
         }).setOrigin(0.5);
 
         yPos += 40;
         this.heightText = this.add.text(panelX, yPos, 'Altura: 0m', {
-            fontSize: '16px',
+            fontSize: '15px',
             fontFamily: 'Arial',
-            color: '#ECF0F1'
+            color: 'rgba(255, 255, 255, 0.9)'
         }).setOrigin(0.5);
 
         yPos += 35;
         this.timerText = this.add.text(panelX, yPos, 'Tiempo: 0:00', {
-            fontSize: '16px',
+            fontSize: '15px',
             fontFamily: 'Arial',
-            color: '#ECF0F1'
+            color: 'rgba(255, 255, 255, 0.9)'
         }).setOrigin(0.5);
 
         yPos += 35;
         this.fingerText = this.add.text(panelX, yPos, 'Posición: Palma', {
-            fontSize: '16px',
+            fontSize: '15px',
             fontFamily: 'Arial',
-            color: '#ECF0F1'
+            color: 'rgba(255, 255, 255, 0.9)'
         }).setOrigin(0.5);
 
         yPos += 35;
         this.grabIndicator = this.add.text(panelX, yPos, '', {
-            fontSize: '14px',
+            fontSize: '13px',
             fontFamily: 'Arial',
-            color: '#2ecc71',
-            fontStyle: 'bold'
+            color: 'rgba(255, 255, 255, 0.9)'
         }).setOrigin(0.5);
 
         // Divider
         yPos += 40;
-        this.add.rectangle(panelX, yPos, 200, 2, 0x95A5A6);
+        this.add.rectangle(panelX, yPos, 200, 1, 0xFFFFFF, 0.2);
 
         // Goal section
         yPos += 30;
         this.add.text(panelX, yPos, 'OBJETIVO', {
-            fontSize: '18px',
+            fontSize: '14px',
             fontFamily: 'Arial',
-            color: '#F39C12',
-            fontStyle: 'bold'
+            color: 'rgba(255, 255, 255, 0.8)'
         }).setOrigin(0.5);
 
         yPos += 35;
         this.add.text(panelX, yPos, '🚩 Alcanza cualquier', {
-            fontSize: '16px',
+            fontSize: '14px',
             fontFamily: 'Arial',
-            color: '#ECF0F1'
+            color: 'rgba(255, 255, 255, 0.9)'
         }).setOrigin(0.5);
 
         yPos += 30;
         this.add.text(panelX, yPos, '¡bandera en la punta del dedo!', {
-            fontSize: '16px',
+            fontSize: '14px',
             fontFamily: 'Arial',
-            color: '#ECF0F1'
+            color: 'rgba(255, 255, 255, 0.9)'
         }).setOrigin(0.5);
 
         // Set everything to be fixed on screen
@@ -336,16 +327,15 @@ export default class GameScene extends Phaser.Scene {
         // Stamina percentage text
         this.staminaText.setText(`${Math.floor(stamina)}%`);
 
-        // Color based on stamina level
+        // Subtle opacity change based on stamina level
         if (stamina < 30) {
-            this.staminaBar.setFillStyle(0xe74c3c);
-            this.staminaText.setColor('#e74c3c');
+            this.staminaBar.setFillStyle(0xFFFFFF, 0.5);
             // Pulse warning when low
             if (!this.staminaPulse) {
                 this.staminaPulse = true;
                 this.tweens.add({
                     targets: this.staminaBar,
-                    alpha: 0.5,
+                    alpha: 0.3,
                     duration: 400,
                     yoyo: true,
                     onComplete: () => {
@@ -353,12 +343,8 @@ export default class GameScene extends Phaser.Scene {
                     }
                 });
             }
-        } else if (stamina < 60) {
-            this.staminaBar.setFillStyle(0xf39c12);
-            this.staminaText.setColor('#f39c12');
         } else {
-            this.staminaBar.setFillStyle(0x2ecc71);
-            this.staminaText.setColor('#ECF0F1');
+            this.staminaBar.setFillStyle(0xFFFFFF, 0.8);
         }
 
         // Current finger
@@ -368,10 +354,10 @@ export default class GameScene extends Phaser.Scene {
         // Grab indicator
         if (climberState.nearestHold && !climberState.isGrabbing) {
             this.grabIndicator.setText('✓ ¡Agarre cerca!');
-            this.grabIndicator.setColor('#2ecc71');
+            this.grabIndicator.setColor('rgba(255, 255, 255, 0.9)');
         } else if (climberState.isGrabbing) {
             this.grabIndicator.setText('⚡ AGARRADO');
-            this.grabIndicator.setColor('#f39c12');
+            this.grabIndicator.setColor('rgba(255, 255, 255, 0.9)');
         } else {
             this.grabIndicator.setText('');
         }

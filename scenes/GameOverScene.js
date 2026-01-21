@@ -17,17 +17,13 @@ export default class GameOverScene extends Phaser.Scene {
         const sky = this.add.rectangle(600, 400, 1200, 800, 0x87CEEB);
         sky.setAlpha(0.7);
 
-        // Victory banner
-        const banner = this.add.rectangle(600, 150, 800, 120, 0xFFD700);
-        banner.setStrokeStyle(6, 0xDAA520);
+        // Victory banner (subtle)
+        const banner = this.add.rectangle(600, 150, 800, 100, 0xFFFFFF, 0.1);
 
-        const victoryText = this.add.text(600, 150, '🎉 ¡CIMA CONQUISTADA! 🎉', {
-            fontSize: '48px',
+        const victoryText = this.add.text(600, 150, '¡CIMA CONQUISTADA!', {
+            fontSize: '42px',
             fontFamily: 'Arial',
-            color: '#8B4513',
-            fontStyle: 'bold',
-            stroke: '#654321',
-            strokeThickness: 4
+            color: '#FFFFFF'
         }).setOrigin(0.5);
 
         // Pulse animation on victory text
@@ -42,16 +38,14 @@ export default class GameOverScene extends Phaser.Scene {
         });
 
         // Stats container
-        const statsContainer = this.add.rectangle(600, 420, 700, 350, 0xFFFFFF);
-        statsContainer.setStrokeStyle(5, 0x8B7355);
-        statsContainer.setAlpha(0.95);
+        const statsContainer = this.add.rectangle(600, 420, 700, 350, 0x000000, 0.3);
+        statsContainer.setStrokeStyle(1, 0xFFFFFF, 0.3);
 
         // Stats header
         const statsHeader = this.add.text(600, 280, 'TU ESCALADA', {
-            fontSize: '36px',
+            fontSize: '28px',
             fontFamily: 'Arial',
-            color: '#8B4513',
-            fontStyle: 'bold'
+            color: '#FFFFFF'
         }).setOrigin(0.5);
 
         // Format time
@@ -84,10 +78,9 @@ export default class GameOverScene extends Phaser.Scene {
                 y,
                 `${stat.icon} ${stat.label}:`,
                 {
-                    fontSize: '24px',
+                    fontSize: '20px',
                     fontFamily: 'Arial',
-                    color: '#333',
-                    fontStyle: 'bold'
+                    color: 'rgba(255, 255, 255, 0.9)'
                 }
             );
 
@@ -96,10 +89,9 @@ export default class GameOverScene extends Phaser.Scene {
                 y,
                 stat.value,
                 {
-                    fontSize: '28px',
+                    fontSize: '24px',
                     fontFamily: 'Arial',
-                    color: '#e74c3c',
-                    fontStyle: 'bold'
+                    color: 'rgba(255, 255, 255, 0.9)'
                 }
             ).setOrigin(1, 0);
 
@@ -129,10 +121,9 @@ export default class GameOverScene extends Phaser.Scene {
         // Achievement message
         const achievement = this.getAchievementMessage(this.finger, this.height, this.time);
         const achievementText = this.add.text(600, 620, achievement, {
-            fontSize: '20px',
+            fontSize: '18px',
             fontFamily: 'Arial',
-            color: '#8B4513',
-            fontStyle: 'italic',
+            color: 'rgba(255, 255, 255, 0.8)',
             align: 'center'
         }).setOrigin(0.5);
     }
@@ -183,42 +174,40 @@ export default class GameOverScene extends Phaser.Scene {
 
     createButtons() {
         // Play Again button
-        const playButton = this.add.rectangle(450, 710, 280, 60, 0xe74c3c);
-        playButton.setStrokeStyle(4, 0x922b21);
+        const playButton = this.add.rectangle(450, 710, 280, 60, 0xFFFFFF, 0.1);
+        playButton.setStrokeStyle(2, 0xFFFFFF, 0.5);
         playButton.setInteractive({ useHandCursor: true });
 
-        const playText = this.add.text(450, 710, '🔄 ESCALAR DE NUEVO', {
-            fontSize: '22px',
+        const playText = this.add.text(450, 710, 'JUGAR DE NUEVO', {
+            fontSize: '18px',
             fontFamily: 'Arial',
-            color: '#ffffff',
-            fontStyle: 'bold'
+            color: '#FFFFFF'
         }).setOrigin(0.5);
 
         // Main Menu button
-        const menuButton = this.add.rectangle(750, 710, 280, 60, 0x3498db);
-        menuButton.setStrokeStyle(4, 0x2980b9);
+        const menuButton = this.add.rectangle(750, 710, 280, 60, 0xFFFFFF, 0.1);
+        menuButton.setStrokeStyle(2, 0xFFFFFF, 0.5);
         menuButton.setInteractive({ useHandCursor: true });
 
-        const menuText = this.add.text(750, 710, '🏠 MENÚ PRINCIPAL', {
-            fontSize: '22px',
+        const menuText = this.add.text(750, 710, 'MENÚ PRINCIPAL', {
+            fontSize: '18px',
             fontFamily: 'Arial',
-            color: '#ffffff',
-            fontStyle: 'bold'
+            color: '#FFFFFF'
         }).setOrigin(0.5);
 
         // Play Again hover
         playButton.on('pointerover', () => {
-            playButton.setFillStyle(0xc0392b);
+            playButton.setFillStyle(0xFFFFFF, 0.2);
             this.tweens.add({
                 targets: [playButton, playText],
-                scaleX: 1.1,
-                scaleY: 1.1,
+                scaleX: 1.05,
+                scaleY: 1.05,
                 duration: 200
             });
         });
 
         playButton.on('pointerout', () => {
-            playButton.setFillStyle(0xe74c3c);
+            playButton.setFillStyle(0xFFFFFF, 0.1);
             this.tweens.add({
                 targets: [playButton, playText],
                 scaleX: 1,
@@ -236,17 +225,17 @@ export default class GameOverScene extends Phaser.Scene {
 
         // Menu hover
         menuButton.on('pointerover', () => {
-            menuButton.setFillStyle(0x2980b9);
+            menuButton.setFillStyle(0xFFFFFF, 0.2);
             this.tweens.add({
                 targets: [menuButton, menuText],
-                scaleX: 1.1,
-                scaleY: 1.1,
+                scaleX: 1.05,
+                scaleY: 1.05,
                 duration: 200
             });
         });
 
         menuButton.on('pointerout', () => {
-            menuButton.setFillStyle(0x3498db);
+            menuButton.setFillStyle(0xFFFFFF, 0.1);
             this.tweens.add({
                 targets: [menuButton, menuText],
                 scaleX: 1,
