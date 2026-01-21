@@ -97,7 +97,8 @@ export default class Climber {
             // Holding space = freeze position
             if (!this.isGrabbing) {
                 this.isGrabbing = true;
-                this.currentHold = nearestHold; // Keep for visual hints
+                // Store actual hold for visual hints (extract from nearestHold object)
+                this.currentHold = nearestHold?.hold || null;
                 // Particle effect on grab
                 this.createGrabParticles();
             }
