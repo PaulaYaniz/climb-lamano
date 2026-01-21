@@ -63,8 +63,8 @@ export default class MenuScene extends Phaser.Scene {
         });
 
         // Subtitle with better styling
-        const subtitle = this.add.text(700, 165, 'Conquista la Cumbre', {
-            fontSize: '26px',
+        const subtitle = this.add.text(700, 155, 'Conquista la Cumbre', {
+            fontSize: '24px',
             fontFamily: 'Arial',
             color: '#F39C12',
             stroke: '#2C3E50',
@@ -73,7 +73,7 @@ export default class MenuScene extends Phaser.Scene {
         }).setOrigin(0.5);
 
         // Birthday message
-        const birthdayMessage = this.add.text(700, 210, '🎉 ¡Feliz Cumpleaños Papá, ya tienes 57! 🎉', {
+        const birthdayMessage = this.add.text(700, 195, '🎉 ¡Feliz Cumpleaños Papá, ya tienes 57! 🎉', {
             fontSize: '22px',
             fontFamily: 'Arial',
             color: '#FFFFFF',
@@ -93,14 +93,14 @@ export default class MenuScene extends Phaser.Scene {
             ease: 'Sine.easeInOut'
         });
 
-        // Left panel with shadow effect
-        const leftShadow = this.add.rectangle(305, 465, 420, 500, 0x000000, 0.3);
-        const leftPanel = this.add.rectangle(300, 460, 420, 500, 0x34495E, 0.95);
+        // Left panel with shadow effect (moved down to avoid overlap)
+        const leftShadow = this.add.rectangle(305, 490, 420, 480, 0x000000, 0.3);
+        const leftPanel = this.add.rectangle(300, 485, 420, 480, 0x34495E, 0.95);
         leftPanel.setStrokeStyle(5, 0x3498db, 0.8);
 
         // Panel header with icon
-        const leftHeader = this.add.rectangle(300, 255, 350, 45, 0x3498db, 0.3);
-        this.add.text(300, 255, '🎯 EL DESAFÍO', {
+        const leftHeader = this.add.rectangle(300, 280, 350, 45, 0x3498db, 0.3);
+        this.add.text(300, 280, '🎯 EL DESAFÍO', {
             fontSize: '22px',
             fontFamily: 'Arial',
             color: '#3498db',
@@ -110,19 +110,19 @@ export default class MenuScene extends Phaser.Scene {
         }).setOrigin(0.5);
 
         // Hand preview image with glow
-        const handGlow = this.add.circle(300, 390, 100, 0xFFFFFF, 0.1);
-        const handPreview = this.add.image(300, 380, 'hand');
+        const handGlow = this.add.circle(300, 415, 100, 0xFFFFFF, 0.1);
+        const handPreview = this.add.image(300, 405, 'hand');
         handPreview.setScale(0.3);
         handPreview.setAlpha(0.95);
 
         // Animated climber on hand
-        const miniClimber = this.add.text(300, 470, '🧗', {
+        const miniClimber = this.add.text(300, 495, '🧗', {
             fontSize: '45px'
         }).setOrigin(0.5);
 
         this.tweens.add({
             targets: miniClimber,
-            y: 330,
+            y: 355,
             duration: 3000,
             yoyo: true,
             repeat: -1,
@@ -130,29 +130,29 @@ export default class MenuScene extends Phaser.Scene {
         });
 
         // Challenge description with better styling
-        const descBox = this.add.rectangle(300, 630, 360, 75, 0x2C3E50, 0.6);
-        this.add.text(300, 618, '¡Escala la mano gigante', {
+        const descBox = this.add.rectangle(300, 655, 360, 75, 0x2C3E50, 0.6);
+        this.add.text(300, 643, '¡Escala la mano gigante', {
             fontSize: '18px',
             fontFamily: 'Arial',
             color: '#ECF0F1',
             align: 'center',
             fontStyle: 'bold'
         }).setOrigin(0.5);
-        this.add.text(300, 642, 'y conquista la cima! 🚩', {
+        this.add.text(300, 667, 'y conquista la cima! 🚩', {
             fontSize: '16px',
             fontFamily: 'Arial',
             color: '#F39C12',
             align: 'center'
         }).setOrigin(0.5);
 
-        // Right panel with shadow
-        const rightShadow = this.add.rectangle(905, 465, 520, 500, 0x000000, 0.3);
-        const rightPanel = this.add.rectangle(900, 460, 520, 500, 0x34495E, 0.95);
+        // Right panel with shadow (moved down to match left panel)
+        const rightShadow = this.add.rectangle(905, 490, 520, 480, 0x000000, 0.3);
+        const rightPanel = this.add.rectangle(900, 485, 520, 480, 0x34495E, 0.95);
         rightPanel.setStrokeStyle(5, 0xe74c3c, 0.8);
 
         // Panel header with icon
-        const rightHeader = this.add.rectangle(900, 255, 440, 45, 0xe74c3c, 0.3);
-        this.add.text(900, 255, '📖 CÓMO JUGAR', {
+        const rightHeader = this.add.rectangle(900, 280, 440, 45, 0xe74c3c, 0.3);
+        this.add.text(900, 280, '📖 CÓMO JUGAR', {
             fontSize: '22px',
             fontFamily: 'Arial',
             color: '#e74c3c',
@@ -161,7 +161,7 @@ export default class MenuScene extends Phaser.Scene {
             strokeThickness: 3
         }).setOrigin(0.5);
 
-        let yPos = 340;
+        let yPos = 365;
 
         // Simplified instructions
         this.add.text(900, yPos, '⬆️ FLECHAS: Muévete', {
