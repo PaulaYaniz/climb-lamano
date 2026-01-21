@@ -32,9 +32,12 @@ export default class MenuScene extends Phaser.Scene {
             });
         }
 
+        // Title background
+        const titleBg = this.add.rectangle(700, 100, 500, 100, 0x000000);
+
         // Title
         const title = this.add.text(700, 100, 'LA MANO', {
-            fontSize: '72px',
+            fontSize: '64px',
             fontFamily: 'Arial',
             color: '#FFFFFF'
         }).setOrigin(0.5);
@@ -50,106 +53,68 @@ export default class MenuScene extends Phaser.Scene {
             ease: 'Sine.easeInOut'
         });
 
-        // Subtitle
-        const subtitle = this.add.text(700, 170, 'Juego de escalada', {
-            fontSize: '20px',
-            fontFamily: 'Arial',
-            color: 'rgba(255, 255, 255, 0.7)'
-        }).setOrigin(0.5);
+        // Left section background
+        const leftBg = this.add.rectangle(300, 450, 500, 600, 0x000000);
 
         // Hand preview image
-        const handPreview = this.add.image(300, 400, 'hand');
+        const handPreview = this.add.image(300, 380, 'hand');
         handPreview.setScale(0.35);
 
         // Animated climber on hand
-        const miniClimber = this.add.text(300, 500, '🧗', {
+        const miniClimber = this.add.text(300, 480, '🧗', {
             fontSize: '48px'
         }).setOrigin(0.5);
 
         this.tweens.add({
             targets: miniClimber,
-            y: 350,
+            y: 330,
             duration: 3000,
             yoyo: true,
             repeat: -1,
             ease: 'Sine.easeInOut'
         });
 
-        this.add.text(300, 620, '¡Escala la mano gigante\npara llegar a la cima!', {
-            fontSize: '18px',
+        this.add.text(300, 600, '¡Escala la mano!', {
+            fontSize: '24px',
             fontFamily: 'Arial',
             color: '#FFFFFF',
-            align: 'center',
-            lineSpacing: 8
+            align: 'center'
         }).setOrigin(0.5);
 
-        this.add.text(900, 240, 'CÓMO JUGAR', {
-            fontSize: '24px',
+        // Right section background
+        const rightBg = this.add.rectangle(900, 450, 600, 600, 0x000000);
+
+        this.add.text(900, 220, 'CONTROLES', {
+            fontSize: '28px',
             fontFamily: 'Arial',
             color: '#FFFFFF'
         }).setOrigin(0.5);
 
-        let yPos = 310;
+        let yPos = 300;
 
-        // Step 1
-        this.add.text(900, yPos, '1. Suelta espacio y usa flechas', {
-            fontSize: '18px',
+        // Controls
+        this.add.text(900, yPos, 'FLECHAS: Muévete', {
+            fontSize: '20px',
             fontFamily: 'Arial',
             color: '#FFFFFF',
             align: 'center'
         }).setOrigin(0.5);
-        this.add.text(900, yPos + 28, 'Muévete ↑ ↓ ← → solo al soltar espacio', {
-            fontSize: '14px',
-            fontFamily: 'Arial',
-            color: 'rgba(255, 255, 255, 0.7)',
-            align: 'center'
-        }).setOrigin(0.5);
 
-        yPos += 100;
+        yPos += 80;
 
-        // Step 2
-        this.add.text(900, yPos, '2. Mantén espacio para congelar', {
-            fontSize: '18px',
+        this.add.text(900, yPos, 'ESPACIO: Congelar', {
+            fontSize: '20px',
             fontFamily: 'Arial',
             color: '#FFFFFF',
             align: 'center'
         }).setOrigin(0.5);
-        this.add.text(900, yPos + 28, 'Detén tu caída y mantén posición', {
-            fontSize: '14px',
-            fontFamily: 'Arial',
-            color: 'rgba(255, 255, 255, 0.7)',
-            align: 'center'
-        }).setOrigin(0.5);
 
-        yPos += 100;
+        yPos += 120;
 
-        // Step 3
-        this.add.text(900, yPos, '3. Suelta para recuperar', {
-            fontSize: '18px',
+        this.add.text(900, yPos, 'Llega a la bandera 🚩', {
+            fontSize: '22px',
             fontFamily: 'Arial',
             color: '#FFFFFF',
-            align: 'center'
-        }).setOrigin(0.5);
-        this.add.text(900, yPos + 28, 'Resistencia se recupera al soltar espacio', {
-            fontSize: '14px',
-            fontFamily: 'Arial',
-            color: 'rgba(255, 255, 255, 0.7)',
-            align: 'center'
-        }).setOrigin(0.5);
-
-        yPos += 100;
-
-        // Step 4
-        this.add.text(900, yPos, '4. ¡Llega a la cima!', {
-            fontSize: '18px',
-            fontFamily: 'Arial',
-            color: '#FFFFFF',
-            align: 'center'
-        }).setOrigin(0.5);
-        this.add.text(900, yPos + 28, 'Llega a cualquier bandera dorada 🚩', {
-            fontSize: '14px',
-            fontFamily: 'Arial',
-            color: 'rgba(255, 255, 255, 0.7)',
             align: 'center'
         }).setOrigin(0.5);
 
@@ -196,13 +161,6 @@ export default class MenuScene extends Phaser.Scene {
                 this.scene.start('GameScene');
             });
         });
-
-        // Keyboard shortcut hint
-        this.add.text(700, 785, 'Presiona ESPACIO para comenzar', {
-            fontSize: '14px',
-            fontFamily: 'Arial',
-            color: 'rgba(255, 255, 255, 0.5)'
-        }).setOrigin(0.5);
 
         // Keyboard shortcut
         this.input.keyboard.on('keydown-SPACE', () => {

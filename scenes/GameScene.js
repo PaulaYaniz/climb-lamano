@@ -87,6 +87,9 @@ export default class GameScene extends Phaser.Scene {
         const panelX = 1150;
         const panelWidth = 240;
 
+        // Side panel background
+        const panel = this.add.rectangle(panelX, 400, panelWidth, 800, 0x000000);
+
         // Title
         this.add.text(panelX, 50, 'LA MANO', {
             fontSize: '20px',
@@ -94,44 +97,13 @@ export default class GameScene extends Phaser.Scene {
             color: '#FFFFFF'
         }).setOrigin(0.5);
 
-        // Controls section
         let yPos = 120;
-        this.add.text(panelX, yPos, 'CONTROLES', {
-            fontSize: '14px',
-            fontFamily: 'Arial',
-            color: 'rgba(255, 255, 255, 0.8)'
-        }).setOrigin(0.5);
 
-        yPos += 40;
-        this.add.text(panelX - 90, yPos, 'FLECHAS', {
-            fontSize: '14px',
-            fontFamily: 'Arial',
-            color: 'rgba(255, 255, 255, 0.9)'
-        });
-        this.add.text(panelX - 20, yPos, 'Muévete en cualquier dirección', {
-            fontSize: '12px',
-            fontFamily: 'Arial',
-            color: 'rgba(255, 255, 255, 0.7)'
-        });
-
-        yPos += 35;
-        this.add.text(panelX - 90, yPos, 'ESPACIO', {
-            fontSize: '14px',
-            fontFamily: 'Arial',
-            color: 'rgba(255, 255, 255, 0.9)'
-        });
-        this.add.text(panelX - 20, yPos, 'Mantén para congelarte', {
-            fontSize: '12px',
-            fontFamily: 'Arial',
-            color: 'rgba(255, 255, 255, 0.7)'
-        });
-
-        // Stamina section
-        yPos += 30;
+        // Stamina
         this.add.text(panelX, yPos, 'RESISTENCIA', {
-            fontSize: '14px',
+            fontSize: '16px',
             fontFamily: 'Arial',
-            color: 'rgba(255, 255, 255, 0.8)'
+            color: '#FFFFFF'
         }).setOrigin(0.5);
 
         yPos += 40;
@@ -157,70 +129,33 @@ export default class GameScene extends Phaser.Scene {
         );
         this.staminaBar.setOrigin(0, 0.5);
 
-        // Stamina percentage text
-        yPos += 30;
+        yPos += 40;
         this.staminaText = this.add.text(panelX, yPos, '100%', {
-            fontSize: '16px',
+            fontSize: '18px',
             fontFamily: 'Arial',
-            color: 'rgba(255, 255, 255, 0.9)'
+            color: '#FFFFFF'
         }).setOrigin(0.5);
 
-        // Stats section
-        yPos += 30;
-        this.add.text(panelX, yPos, 'ESTADÍSTICAS', {
-            fontSize: '14px',
+        // Stats
+        yPos += 60;
+        this.heightText = this.add.text(panelX, yPos, '0m', {
+            fontSize: '20px',
             fontFamily: 'Arial',
-            color: 'rgba(255, 255, 255, 0.8)'
+            color: '#FFFFFF'
         }).setOrigin(0.5);
 
         yPos += 40;
-        this.heightText = this.add.text(panelX, yPos, 'Altura: 0m', {
-            fontSize: '15px',
+        this.timerText = this.add.text(panelX, yPos, '0:00', {
+            fontSize: '20px',
             fontFamily: 'Arial',
-            color: 'rgba(255, 255, 255, 0.9)'
+            color: '#FFFFFF'
         }).setOrigin(0.5);
 
-        yPos += 35;
-        this.timerText = this.add.text(panelX, yPos, 'Tiempo: 0:00', {
-            fontSize: '15px',
-            fontFamily: 'Arial',
-            color: 'rgba(255, 255, 255, 0.9)'
-        }).setOrigin(0.5);
-
-        yPos += 35;
-        this.fingerText = this.add.text(panelX, yPos, 'Posición: Palma', {
-            fontSize: '15px',
-            fontFamily: 'Arial',
-            color: 'rgba(255, 255, 255, 0.9)'
-        }).setOrigin(0.5);
-
-        yPos += 35;
+        yPos += 60;
         this.grabIndicator = this.add.text(panelX, yPos, '', {
-            fontSize: '13px',
-            fontFamily: 'Arial',
-            color: 'rgba(255, 255, 255, 0.9)'
-        }).setOrigin(0.5);
-
-        // Goal section
-        yPos += 30;
-        this.add.text(panelX, yPos, 'OBJETIVO', {
             fontSize: '14px',
             fontFamily: 'Arial',
-            color: 'rgba(255, 255, 255, 0.8)'
-        }).setOrigin(0.5);
-
-        yPos += 35;
-        this.add.text(panelX, yPos, '🚩 Alcanza cualquier', {
-            fontSize: '14px',
-            fontFamily: 'Arial',
-            color: 'rgba(255, 255, 255, 0.9)'
-        }).setOrigin(0.5);
-
-        yPos += 30;
-        this.add.text(panelX, yPos, '¡bandera en la punta del dedo!', {
-            fontSize: '14px',
-            fontFamily: 'Arial',
-            color: 'rgba(255, 255, 255, 0.9)'
+            color: '#FFFFFF'
         }).setOrigin(0.5);
 
         // Set everything to be fixed on screen
@@ -276,7 +211,7 @@ export default class GameScene extends Phaser.Scene {
     updateHUD(climberState) {
         // Height
         const height = this.climber.getHeight();
-        this.heightText.setText(`Altura: ${height}m`);
+        this.heightText.setText(`${height}m`);
 
         // Stamina bar
         const stamina = this.climber.getStamina();
@@ -305,17 +240,11 @@ export default class GameScene extends Phaser.Scene {
             this.staminaBar.setAlpha(1);
         }
 
-        // Current finger
-        const currentFinger = this.climber.getCurrentFinger(this.handWall.getHolds());
-        this.fingerText.setText(`Posición: ${currentFinger}`);
-
         // Grab indicator
         if (climberState.nearestHold && !climberState.isGrabbing) {
-            this.grabIndicator.setText('✓ ¡Agarre cerca!');
-            this.grabIndicator.setColor('rgba(255, 255, 255, 0.9)');
+            this.grabIndicator.setText('Cerca');
         } else if (climberState.isGrabbing) {
-            this.grabIndicator.setText('⚡ AGARRADO');
-            this.grabIndicator.setColor('rgba(255, 255, 255, 0.9)');
+            this.grabIndicator.setText('AGARRADO');
         } else {
             this.grabIndicator.setText('');
         }

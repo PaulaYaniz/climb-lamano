@@ -17,8 +17,11 @@ export default class GameOverScene extends Phaser.Scene {
         const sky = this.add.rectangle(600, 400, 1200, 800, 0x87CEEB);
         sky.setAlpha(0.7);
 
-        const victoryText = this.add.text(600, 120, '¡CIMA CONQUISTADA!', {
-            fontSize: '48px',
+        // Title background
+        const titleBg = this.add.rectangle(600, 100, 700, 80, 0x000000);
+
+        const victoryText = this.add.text(600, 100, '¡VICTORIA!', {
+            fontSize: '56px',
             fontFamily: 'Arial',
             color: '#FFFFFF'
         }).setOrigin(0.5);
@@ -34,87 +37,57 @@ export default class GameOverScene extends Phaser.Scene {
             ease: 'Sine.easeInOut'
         });
 
-        // Stats header
-        const statsHeader = this.add.text(600, 240, 'TU ESCALADA', {
-            fontSize: '32px',
-            fontFamily: 'Arial',
-            color: '#FFFFFF'
-        }).setOrigin(0.5);
+        // Stats background
+        const statsBg = this.add.rectangle(600, 420, 700, 420, 0x000000);
 
         // Format time
         const minutes = Math.floor(this.time / 60);
         const seconds = this.time % 60;
         const timeStr = `${minutes}:${seconds.toString().padStart(2, '0')}`;
 
-        // Finger conquered with emoji
-        const fingerEmojis = {
-            thumb: '👍',
-            index: '☝️',
-            middle: '🖕',
-            ring: '💍',
-            pinky: '🤙'
-        };
-        const fingerEmoji = fingerEmojis[this.finger.toLowerCase()] || '✋';
+        let yPos = 280;
 
-        // Individual stats
-        const stats = [
-            { icon: fingerEmoji, label: 'Dedo Conquistado', value: this.finger.toUpperCase() },
-            { icon: '⛰️', label: 'Altura Alcanzada', value: `${this.height}m` },
-            { icon: '⏱️', label: 'Tiempo', value: timeStr }
-        ];
+        // Height
+        const heightText = this.add.text(600, yPos, `${this.height}m`, {
+            fontSize: '48px',
+            fontFamily: 'Arial',
+            color: '#FFFFFF',
+            align: 'center'
+        }).setOrigin(0.5);
 
-        stats.forEach((stat, index) => {
-            const y = 320 + index * 80;
+        yPos += 60;
 
-            const statText = this.add.text(
-                600,
-                y,
-                `${stat.icon} ${stat.label}`,
-                {
-                    fontSize: '18px',
-                    fontFamily: 'Arial',
-                    color: 'rgba(255, 255, 255, 0.8)',
-                    align: 'center'
-                }
-            ).setOrigin(0.5);
+        // Time
+        const timeText = this.add.text(600, yPos, timeStr, {
+            fontSize: '48px',
+            fontFamily: 'Arial',
+            color: '#FFFFFF',
+            align: 'center'
+        }).setOrigin(0.5);
 
-            const valueText = this.add.text(
-                600,
-                y + 30,
-                stat.value,
-                {
-                    fontSize: '32px',
-                    fontFamily: 'Arial',
-                    color: '#FFFFFF',
-                    align: 'center'
-                }
-            ).setOrigin(0.5);
+        // Animate stats appearing
+        heightText.setAlpha(0);
+        timeText.setAlpha(0);
 
-            // Animate stats appearing
-            statText.setAlpha(0);
-            valueText.setAlpha(0);
+        this.tweens.add({
+            targets: [heightText],
+            alpha: 1,
+            duration: 500,
+            delay: 500,
+            ease: 'Power2'
+        });
 
-            this.tweens.add({
-                targets: [statText, valueText],
-                alpha: 1,
-                duration: 500,
-                delay: 500 + index * 200,
-                ease: 'Power2'
-            });
+        this.tweens.add({
+            targets: [timeText],
+            alpha: 1,
+            duration: 500,
+            delay: 700,
+            ease: 'Power2'
         });
 
         // Star rating based on time
         const rating = this.calculateRating(this.time, this.height);
-        this.showStarRating(rating, 600, 590);
-
-        // Achievement message
-        const achievement = this.getAchievementMessage(this.finger, this.height, this.time);
-        const achievementText = this.add.text(600, 650, achievement, {
-            fontSize: '16px',
-            fontFamily: 'Arial',
-            color: 'rgba(255, 255, 255, 0.7)',
-            align: 'center'
-        }).setOrigin(0.5);
+        this.showStarRating(rating, 600, 490);
 
         // Buttons
         this.createButtons();
@@ -174,8 +147,8 @@ export default class GameOverScene extends Phaser.Scene {
         playButton.setFillStyle(0x000000, 0);
         playButton.setInteractive({ useHandCursor: true });
 
-        const playText = this.add.text(450, 730, 'JUGAR DE NUEVO', {
-            fontSize: '18px',
+        const playText = this.add.text(450, 730, 'DE NUEVO', {
+            fontSize: '20px',
             fontFamily: 'Arial',
             color: '#FFFFFF'
         }).setOrigin(0.5);
@@ -186,8 +159,8 @@ export default class GameOverScene extends Phaser.Scene {
         menuButton.setFillStyle(0x000000, 0);
         menuButton.setInteractive({ useHandCursor: true });
 
-        const menuText = this.add.text(750, 730, 'MENÚ PRINCIPAL', {
-            fontSize: '18px',
+        const menuText = this.add.text(750, 730, 'MENÚ', {
+            fontSize: '20px',
             fontFamily: 'Arial',
             color: '#FFFFFF'
         }).setOrigin(0.5);
