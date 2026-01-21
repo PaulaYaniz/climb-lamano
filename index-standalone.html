@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Mano - Climbing Challenge</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(180deg, #87CEEB 0%, #6BA3D0 50%, #8B7355 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+        #game-container {
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        canvas {
+            display: block;
+            outline: none !important;
+            border: none !important;
+        }
+        #click-hint {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(231, 76, 60, 0.95);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            z-index: 10000;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: translateX(-50%) scale(1); }
+            50% { transform: translateX(-50%) scale(1.05); }
+        }
+    </style>
+</head>
+<body>
+    <div id="click-hint">👆 CLICK HERE FIRST, then use arrow keys!</div>
+    <div id="game-container"></div>
+
+    <!-- Phaser 3 from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
+
+    <script>
+        // ============================================
+        // HandWall Class
+        // ============================================
+        class HandWall {
+            constructor(scene) {
+                this.scene = scene;
+                this.holds = [];
+                this.fingers = [];
+                this.goals = [];
+                this.createHand();
+            }
+
+            createHand() {
+                const baseY = 700;
+                const palmHeight = 180;
+                this.createPalm(baseY, palmHeight);
+                this.createFinger('thumb', 120, baseY - palmHeight, 320, 130, -20);
+                this.createFinger('index', 300, baseY - palmHeight, 450, 110, 0);
+                this.createFinger('middle', 450, baseY - palmHeight, 520, 115, 0);
+                this.createFinger('ring', 610, baseY - palmHeight, 440, 105, 0);
+                this.createFinger('pinky', 750, baseY - palmHeight, 350, 90, 5);
+            }
+
+            createPalm(baseY, height) {
+                const palmWidth = 750;
+                const palmX = 600;
+                const graphics = this.scene.add.graphics();
+                graphics.fillGradientStyle(0xD4C4B0, 0xD4C4B0, 0x9E8E7C, 0x9E8E7C, 1);
+                graphics.fillRect(palmX - palmWidth/2, baseY - height, palmWidth, height);
+                graphics.lineStyle(5, 0x654321, 1);
+                graphics.strokeRect(palmX - palmWidth/2, baseY - height, palmWidth, height);
+                graphics.fillStyle(0x000000, 0.15);
+                for (let i = 0; i < 60; i++) {
+                    const x = palmX - palmWidth/2 + 30 + Math.random() * (palmWidth - 60);
+                    const y = baseY - height + 20 + Math.random() * (height - 40);
+                    graphics.fillCircle(x, y, 3);
+                }
+                graphics.lineStyle(2, 0x000000, 0.1);
+                for (let i = 0; i < 8; i++) {
+                    const startX = palmX - palmWidth/2 + Math.random() * palmWidth;
+                    const startY = baseY - height + Math.random() * height;
+                    graphics.beginPath();
+                    graphics.moveTo(startX, startY);
+                    graphics.lineTo(startX + (Math.random() - 0.5) * 100, startY + Math.random() * 50);
+                    graphics.strokePath();
+                }
+
+                // Add starter holds on the palm so player can begin climbing
+                this.createStarterHolds(palmX, baseY, palmWidth, height);
+            }
+
+            createStarterHolds(palmX, baseY, palmWidth, height) {
+                const holdPositions = [
+                    { x: palmX - 200, y: baseY - 30 },
+                    { x: palmX, y: baseY - 50 },
+                    { x: palmX + 200, y: baseY - 30 },
+                    { x: palmX - 250, y: baseY - 90 },
+                    { x: palmX - 100, y: baseY - 110 },
+                    { x: palmX + 100, y: baseY - 110 },
+                    { x: palmX + 250, y: baseY - 90 }
+                ];
+
+                holdPositions.forEach(pos => {
+                    const size = 15;
+                    const graphics = this.scene.add.graphics();
+                    graphics.fillStyle(0xFF6B6B, 1);
+                    graphics.fillCircle(pos.x, pos.y, size);
+                    graphics.lineStyle(4, 0x8B0000, 1);
+                    graphics.strokeCircle(pos.x, pos.y, size);
+
+                    this.holds.push({
+                        x: pos.x,
+                        y: pos.y,
+                        size: size,
+                        finger: 'palm',
+                        graphics: graphics
+                    });
+                });
+            }
+
+            createFinger(name, x, baseY, height, width, rotation) {
+                const graphics = this.scene.add.graphics();
+                const rad = rotation * Math.PI / 180;
+                graphics.fillGradientStyle(0xD4C4B0, 0xD4C4B0, 0x8E7E6C, 0x8E7E6C, 1);
+                graphics.save();
+                graphics.translateCanvas(x + width/2, baseY);
+                graphics.rotateCanvas(rad);
+                graphics.fillRect(-width/2, -height, width, height);
+                graphics.fillStyle(0xB5A695);
+                graphics.fillCircle(0, -height, width/2);
+                graphics.lineStyle(5, 0x654321, 1);
+                graphics.strokeRect(-width/2, -height, width, height);
+                graphics.strokeCircle(0, -height, width/2);
+                graphics.fillStyle(0x000000, 0.12);
+                const rows = Math.floor(height / 50);
+                for (let row = 0; row < rows; row++) {
+                    for (let col = 0; col < 3; col++) {
+                        const localX = -width/3 + (col * width/3);
+                        const localY = -height + 30 + row * 50 + Math.random() * 20;
+                        graphics.fillCircle(localX, localY, 3);
+                    }
+                }
+                graphics.lineStyle(2, 0x000000, 0.08);
+                for (let i = 0; i < 5; i++) {
+                    const crackX = (Math.random() - 0.5) * width * 0.8;
+                    const crackY = -height + Math.random() * height;
+                    graphics.beginPath();
+                    graphics.moveTo(crackX, crackY);
+                    graphics.lineTo(crackX + (Math.random() - 0.5) * 40, crackY + 30 + Math.random() * 30);
+                    graphics.strokePath();
+                }
+                graphics.restore();
+                this.fingers.push({ name, x, baseY, height, width, rotation });
+                this.createHoldsOnFinger(name, x, baseY, height, width, rotation);
+                this.createGoal(name, x, baseY - height, width, rotation);
+            }
+
+            createHoldsOnFinger(fingerName, fingerX, fingerBaseY, height, width, rotation) {
+                const numHolds = Math.floor(height / 60) + 2;
+                const holdColors = [0xFF6B6B, 0xFFA07A, 0xFF8C69, 0xCD5C5C, 0xE74C3C];
+
+                for (let i = 0; i < numHolds; i++) {
+                    const progress = i / (numHolds - 1);
+                    const y = fingerBaseY - (progress * height * 0.9);
+                    const xOffset = (Math.random() - 0.5) * (width * 0.5);
+                    const rad = rotation * Math.PI / 180;
+                    const rotatedX = xOffset * Math.cos(rad);
+                    const rotatedY = xOffset * Math.sin(rad);
+                    const x = fingerX + width / 2 + rotatedX;
+                    const finalY = y + rotatedY;
+                    const holdSize = 12 + Math.random() * 6;
+                    const color = holdColors[Math.floor(Math.random() * holdColors.length)];
+
+                    const holdGraphics = this.scene.add.graphics();
+                    holdGraphics.fillStyle(0x000000, 0.3);
+                    holdGraphics.fillCircle(x + 3, finalY + 3, holdSize);
+                    holdGraphics.fillGradientStyle(color, color, Phaser.Display.Color.GetColor(
+                        Math.max(0, ((color >> 16) & 0xFF) - 50),
+                        Math.max(0, ((color >> 8) & 0xFF) - 50),
+                        Math.max(0, (color & 0xFF) - 50)
+                    ), Phaser.Display.Color.GetColor(
+                        Math.max(0, ((color >> 16) & 0xFF) - 50),
+                        Math.max(0, ((color >> 8) & 0xFF) - 50),
+                        Math.max(0, (color & 0xFF) - 50)
+                    ), 1);
+                    holdGraphics.fillCircle(x, finalY, holdSize);
+                    holdGraphics.fillStyle(0xFFFFFF, 0.4);
+                    holdGraphics.fillCircle(x - holdSize/3, finalY - holdSize/3, holdSize/3);
+                    holdGraphics.lineStyle(2, 0x8B4513, 1);
+                    holdGraphics.strokeCircle(x, finalY, holdSize);
+
+                    const hold = this.scene.add.circle(x, finalY, holdSize, color, 0);
+                    this.scene.physics.add.existing(hold, true);
+
+                    this.holds.push({
+                        sprite: hold,
+                        graphics: holdGraphics,
+                        finger: fingerName,
+                        x: x,
+                        y: finalY,
+                        size: holdSize,
+                        originalScale: 1,
+                        color: color
+                    });
+                }
+            }
+
+            createGoal(fingerName, x, y, width, rotation) {
+                const rad = rotation * Math.PI / 180;
+                const goalX = x + width / 2 + ((-30) * Math.sin(rad));
+                const goalY = y - 40 - ((-30) * Math.cos(rad));
+
+                const flag = this.scene.add.text(goalX, goalY, '🚩', { fontSize: '56px' }).setOrigin(0.5);
+                this.scene.tweens.add({
+                    targets: flag,
+                    angle: { from: -12, to: 12 },
+                    duration: 1800,
+                    yoyo: true,
+                    repeat: -1,
+                    ease: 'Sine.easeInOut'
+                });
+
+                const goalZone = this.scene.add.circle(goalX, goalY, 70, 0xFFD700, 0);
+                this.scene.physics.add.existing(goalZone, true);
+
+                this.goals.push({ finger: fingerName, sprite: flag, zone: goalZone, x: goalX, y: goalY });
+            }
+
+            getHolds() { return this.holds; }
+            getGoals() { return this.goals; }
+
+            highlightNearbyHold(hold, isGrabbing) {
+                if (!hold || !hold.graphics) return;
+                if (isGrabbing) {
+                    this.scene.tweens.add({
+                        targets: hold.graphics,
+                        scaleX: 1.5,
+                        scaleY: 1.5,
+                        duration: 100,
+                        ease: 'Power2'
+                    });
+                    hold.graphics.clear();
+                    hold.graphics.fillStyle(0xFFD700, 0.5);
+                    hold.graphics.fillCircle(hold.x, hold.y, hold.size * 2);
+                    hold.graphics.fillStyle(hold.color);
+                    hold.graphics.fillCircle(hold.x, hold.y, hold.size);
+                } else {
+                    this.scene.tweens.add({
+                        targets: hold.graphics,
+                        scaleX: 1.2,
+                        scaleY: 1.2,
+                        duration: 300,
+                        yoyo: true,
+                        ease: 'Sine.easeInOut'
+                    });
+                }
+            }
+
+            resetHoldHighlight(hold) {
+                if (!hold || !hold.graphics) return;
+                this.scene.tweens.add({
+                    targets: hold.graphics,
+                    scaleX: 1,
+                    scaleY: 1,
+                    duration: 200,
+                    ease: 'Power2'
+                });
+                hold.graphics.clear();
+                hold.graphics.fillStyle(0x000000, 0.3);
+                hold.graphics.fillCircle(hold.x + 3, hold.y + 3, hold.size);
+                hold.graphics.fillStyle(hold.color);
+                hold.graphics.fillCircle(hold.x, hold.y, hold.size);
+                hold.graphics.fillStyle(0xFFFFFF, 0.4);
+                hold.graphics.fillCircle(hold.x - hold.size/3, hold.y - hold.size/3, hold.size/3);
+                hold.graphics.lineStyle(2, 0x8B4513, 1);
+                hold.graphics.strokeCircle(hold.x, hold.y, hold.size);
+            }
+        }
+
+        // ============================================
+        // Climber Class - WASD + ARROWS
+        // ============================================
+        class Climber {
+            constructor(scene, x, y) {
+                this.scene = scene;
+                this.sprite = scene.add.text(x, y, '🧗', { fontSize: '52px' }).setOrigin(0.5);
+                scene.physics.add.existing(this.sprite);
+                this.body = this.sprite.body;
+                this.body.setCollideWorldBounds(true);
+                this.body.setDrag(300, 100);
+                this.body.setMaxVelocity(250, 600);
+                this.body.setSize(40, 40);
+
+                this.isGrabbing = false;
+                this.currentHold = null;
+                this.stamina = 100;
+                this.maxStamina = 100;
+                this.maxHeightReached = 0;
+
+                this.moveSpeed = 180;
+                this.climbSpeed = 140;
+                this.staminaDrainRate = 0.7;
+                this.staminaRecoveryRate = 0.6;
+
+                // BOTH arrow keys AND WASD
+                this.keys = {};
+
+                this.isFalling = false;
+                this.keyIndicator = null;
+            }
+
+            setupKeys(scene) {
+                // Arrow keys
+                this.keys.left = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
+                this.keys.right = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+                this.keys.up = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
+                this.keys.down = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
+
+                // WASD alternative
+                this.keys.a = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+                this.keys.d = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+                this.keys.w = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+                this.keys.s = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+
+                // Space
+                this.keys.space = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+
+                // Visual indicator for debugging
+                this.keyIndicator = scene.add.text(600, 750, '', {
+                    fontSize: '18px',
+                    color: '#ffffff',
+                    backgroundColor: '#000000aa',
+                    padding: { x: 10, y: 5 }
+                }).setOrigin(0.5).setScrollFactor(0).setDepth(150);
+            }
+
+            update(holds) {
+                const currentHeight = 700 - this.sprite.y;
+                this.maxHeightReached = Math.max(this.maxHeightReached, currentHeight);
+
+                const nearestHold = this.findNearestHold(holds);
+                this.handleGrabbing(nearestHold);
+                this.handleMovement();
+                this.updateStamina();
+                this.updateVisuals();
+                this.updateKeyIndicator();
+
+                return {
+                    nearestHold: nearestHold,
+                    isGrabbing: this.isGrabbing,
+                    currentHold: this.currentHold
+                };
+            }
+
+            updateKeyIndicator() {
+                if (!this.keyIndicator) return;
+
+                let pressed = [];
+                if (this.keys.left?.isDown || this.keys.a?.isDown) pressed.push('←');
+                if (this.keys.right?.isDown || this.keys.d?.isDown) pressed.push('→');
+                if (this.keys.up?.isDown || this.keys.w?.isDown) pressed.push('↑');
+                if (this.keys.down?.isDown || this.keys.s?.isDown) pressed.push('↓');
+                if (this.keys.space?.isDown) pressed.push('SPACE');
+
+                if (pressed.length > 0) {
+                    this.keyIndicator.setText('Keys: ' + pressed.join(' '));
+                    this.keyIndicator.setAlpha(1);
+                } else {
+                    this.keyIndicator.setAlpha(0.3);
+                    this.keyIndicator.setText('Press arrow keys or WASD');
+                }
+            }
+
+            findNearestHold(holds) {
+                let nearest = null;
+                let minDistance = Infinity;
+                const grabDistance = 90;
+
+                holds.forEach(hold => {
+                    const dx = this.sprite.x - hold.x;
+                    const dy = this.sprite.y - hold.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        nearest = { hold, distance };
+                    }
+                });
+
+                if (nearest && nearest.distance < grabDistance) {
+                    return nearest;
+                }
+                return null;
+            }
+
+            handleGrabbing(nearestHold) {
+                if (this.keys.space?.isDown && nearestHold && this.stamina > 5) {
+                    if (!this.isGrabbing) {
+                        this.isGrabbing = true;
+                        this.currentHold = nearestHold.hold;
+                        this.isFalling = false;
+
+                        const snapStrength = 0.25;
+                        this.sprite.x += (nearestHold.hold.x - this.sprite.x) * snapStrength;
+                        this.sprite.y += (nearestHold.hold.y - this.sprite.y) * snapStrength;
+
+                        this.createGrabParticles();
+                    }
+
+                    this.body.setDrag(900, 900);
+                    this.body.setGravityY(-500);
+
+                } else {
+                    if (this.isGrabbing) {
+                        this.isGrabbing = false;
+                        this.currentHold = null;
+                    }
+                    this.body.setDrag(300, 100);
+                    this.body.setGravityY(0);
+                }
+            }
+
+            handleMovement() {
+                // Left: arrow OR A
+                if (this.keys.left?.isDown || this.keys.a?.isDown) {
+                    this.body.setVelocityX(-this.moveSpeed);
+                    this.sprite.setFlipX(true);
+                }
+                // Right: arrow OR D
+                else if (this.keys.right?.isDown || this.keys.d?.isDown) {
+                    this.body.setVelocityX(this.moveSpeed);
+                    this.sprite.setFlipX(false);
+                }
+
+                // Up: arrow OR W (only when grabbing)
+                if ((this.keys.up?.isDown || this.keys.w?.isDown) && this.isGrabbing && this.stamina > 10) {
+                    this.body.setVelocityY(-this.climbSpeed);
+                }
+                // Down: arrow OR S
+                else if ((this.keys.down?.isDown || this.keys.s?.isDown) && !this.isGrabbing) {
+                    this.body.setVelocityY(350);
+                }
+            }
+
+            updateStamina() {
+                if (this.isGrabbing && (this.keys.up?.isDown || this.keys.w?.isDown)) {
+                    this.stamina = Math.max(0, this.stamina - this.staminaDrainRate);
+                } else if (!this.isGrabbing || (!this.keys.up?.isDown && !this.keys.w?.isDown)) {
+                    this.stamina = Math.min(this.maxStamina, this.stamina + this.staminaRecoveryRate);
+                }
+
+                if (this.stamina <= 0) {
+                    this.isGrabbing = false;
+                    this.currentHold = null;
+                }
+            }
+
+            updateVisuals() {
+                const velocityX = this.body.velocity.x;
+                const targetAngle = this.isFalling ? 45 : velocityX * 0.015;
+                this.sprite.setRotation(targetAngle * Math.PI / 180);
+            }
+
+            createGrabParticles() {
+                const particles = this.scene.add.particles(this.sprite.x, this.sprite.y, 'particle', {
+                    speed: { min: 30, max: 80 },
+                    angle: { min: 0, max: 360 },
+                    scale: { start: 1.2, end: 0 },
+                    alpha: { start: 0.9, end: 0 },
+                    lifespan: 500,
+                    quantity: 12,
+                    blendMode: 'ADD',
+                    tint: 0xFFFFFF
+                });
+
+                this.scene.time.delayedCall(600, () => particles.destroy());
+            }
+
+            startFalling() {
+                this.isFalling = true;
+                this.scene.cameras.main.shake(200, 0.003);
+            }
+
+            getStamina() { return this.stamina; }
+            getHeight() { return Math.max(0, Math.floor((700 - this.sprite.y) / 10)); }
+
+            getCurrentFinger(holds) {
+                if (!this.currentHold) {
+                    if (this.sprite.y > 600) return 'Palm';
+                    return 'Climbing';
+                }
+                const fingerName = this.currentHold.finger;
+                return fingerName.charAt(0).toUpperCase() + fingerName.slice(1);
+            }
+
+            checkGoalCollision(goals) {
+                for (let goal of goals) {
+                    const dx = this.sprite.x - goal.x;
+                    const dy = this.sprite.y - goal.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < 70) return goal;
+                }
+                return null;
+            }
+
+            hasFallen() {
+                return this.maxHeightReached > 100 && this.sprite.y > 680;
+            }
+
+            reset() {
+                this.sprite.setPosition(600, 650);
+                this.stamina = 100;
+                this.isGrabbing = false;
+                this.currentHold = null;
+                this.isFalling = false;
+                this.maxHeightReached = 0;
+                this.body.setVelocity(0, 0);
+            }
+        }
+
+        // ============================================
+        // MenuScene
+        // ============================================
+        class MenuScene extends Phaser.Scene {
+            constructor() {
+                super({ key: 'MenuScene' });
+            }
+
+            create() {
+                const bg = this.add.rectangle(600, 400, 1200, 800, 0x87CEEB);
+
+                const title = this.add.text(600, 120, '🧗 LA MANO 🧗', {
+                    fontSize: '82px',
+                    fontFamily: 'Arial',
+                    color: '#8B4513',
+                    fontStyle: 'bold',
+                    stroke: '#654321',
+                    strokeThickness: 10
+                }).setOrigin(0.5);
+
+                const subtitle = this.add.text(600, 210, 'Extreme Climbing Challenge', {
+                    fontSize: '28px',
+                    fontFamily: 'Arial',
+                    color: '#c0392b',
+                    fontStyle: 'bold italic'
+                }).setOrigin(0.5);
+
+                const climber = this.add.text(600, 320, '🧗', { fontSize: '86px' }).setOrigin(0.5);
+                this.tweens.add({
+                    targets: climber,
+                    y: 300,
+                    duration: 1500,
+                    yoyo: true,
+                    repeat: -1,
+                    ease: 'Sine.easeInOut'
+                });
+
+                const instructionsBg = this.add.rectangle(600, 520, 750, 260, 0xFFE4B5);
+                instructionsBg.setStrokeStyle(5, 0x8B7355);
+
+                const instructions = this.add.text(600, 450,
+                    '🎮 CONTROLS (Click game first!)\n\n' +
+                    'Arrow Keys OR WASD: Move\n' +
+                    'SPACE: Grab holds (hold it!)\n' +
+                    '↑/W while grabbing: Climb up\n' +
+                    'ESC: Return to menu\n\n' +
+                    '🎯 Reach any fingertip flag!\n' +
+                    '⚠️ Manage stamina - rest at holds!',
+                    {
+                        fontSize: '16px',
+                        fontFamily: 'Arial',
+                        color: '#333',
+                        align: 'center',
+                        lineSpacing: 4
+                    }
+                ).setOrigin(0.5, 0);
+
+                const startButton = this.add.rectangle(600, 710, 350, 75, 0xe74c3c);
+                startButton.setStrokeStyle(5, 0x922b21);
+                startButton.setInteractive({ useHandCursor: true });
+
+                const startText = this.add.text(600, 710, '🚀 START CLIMBING', {
+                    fontSize: '26px',
+                    fontFamily: 'Arial',
+                    color: '#ffffff',
+                    fontStyle: 'bold'
+                }).setOrigin(0.5);
+
+                startButton.on('pointerover', () => {
+                    startButton.setFillStyle(0xc0392b);
+                    this.tweens.add({ targets: [startButton, startText], scaleX: 1.08, scaleY: 1.08, duration: 150 });
+                });
+
+                startButton.on('pointerout', () => {
+                    startButton.setFillStyle(0xe74c3c);
+                    this.tweens.add({ targets: [startButton, startText], scaleX: 1, scaleY: 1, duration: 150 });
+                });
+
+                startButton.on('pointerdown', () => {
+                    this.cameras.main.fade(400, 0, 0, 0);
+                    this.time.delayedCall(400, () => this.scene.start('GameScene'));
+                });
+
+                const spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+                spaceKey.on('down', () => this.scene.start('GameScene'));
+
+                this.tweens.add({
+                    targets: title,
+                    scaleX: 1.06,
+                    scaleY: 1.06,
+                    duration: 2000,
+                    yoyo: true,
+                    repeat: -1,
+                    ease: 'Sine.easeInOut'
+                });
+
+                for (let i = 0; i < 6; i++) {
+                    const rock = this.add.text(
+                        Phaser.Math.Between(50, 1150),
+                        Phaser.Math.Between(680, 770),
+                        '🪨',
+                        { fontSize: '28px' }
+                    );
+                    rock.setAlpha(0.6);
+                }
+            }
+        }
+
+        // ============================================
+        // GameScene
+        // ============================================
+        class GameScene extends Phaser.Scene {
+            constructor() {
+                super({ key: 'GameScene' });
+            }
+
+            preload() {
+                const graphics = this.make.graphics({ x: 0, y: 0, add: false });
+                graphics.fillStyle(0xFFFFFF, 1);
+                graphics.fillCircle(5, 5, 5);
+                graphics.generateTexture('particle', 10, 10);
+                graphics.destroy();
+            }
+
+            create() {
+                this.createBackground();
+
+                this.handWall = new HandWall(this);
+                this.climber = new Climber(this, 600, 650);
+                this.climber.setupKeys(this); // Setup keys after creation
+
+                this.gameTime = 0;
+                this.gameActive = true;
+                this.lastNearestHold = null;
+                this.isPaused = false;
+
+                this.createHUD();
+                this.setupCamera();
+
+                this.time.addEvent({
+                    delay: 1000,
+                    callback: this.updateTimer,
+                    callbackScope: this,
+                    loop: true
+                });
+
+                this.showInstructions();
+
+                const escKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
+                escKey.on('down', () => this.returnToMenu());
+            }
+
+            createBackground() {
+                const graphics = this.add.graphics();
+                graphics.fillGradientStyle(0x87CEEB, 0x87CEEB, 0xB8D4E8, 0xB8D4E8, 1);
+                graphics.fillRect(0, 0, 1200, 600);
+                graphics.fillStyle(0x8B7355);
+                graphics.fillRect(0, 700, 1200, 100);
+
+                for (let i = 0; i < 4; i++) {
+                    const cloud = this.add.text(
+                        Phaser.Math.Between(100, 1100),
+                        Phaser.Math.Between(30, 250),
+                        '☁️',
+                        { fontSize: '52px' }
+                    );
+                    cloud.setAlpha(0.7);
+                    this.tweens.add({
+                        targets: cloud,
+                        x: cloud.x + Phaser.Math.Between(40, 120),
+                        duration: Phaser.Math.Between(12000, 20000),
+                        yoyo: true,
+                        repeat: -1,
+                        ease: 'Sine.easeInOut'
+                    });
+                }
+            }
+
+            createHUD() {
+                const hudBg = this.add.rectangle(600, 45, 1150, 75, 0x000000, 0.4);
+                hudBg.setStrokeStyle(2, 0xFFFFFF, 0.3);
+
+                this.heightText = this.add.text(30, 30, '⛰️ Height: 0m', {
+                    fontSize: '22px',
+                    fontFamily: 'Arial',
+                    color: '#ffffff',
+                    fontStyle: 'bold',
+                    stroke: '#000000',
+                    strokeThickness: 4
+                });
+
+                const staminaX = 240;
+                const staminaY = 32;
+                const staminaWidth = 280;
+                const staminaHeight = 28;
+
+                this.add.text(staminaX - 55, staminaY - 10, '💪', { fontSize: '28px' });
+
+                this.staminaBg = this.add.rectangle(staminaX + staminaWidth / 2, staminaY, staminaWidth, staminaHeight, 0x222222);
+                this.staminaBg.setStrokeStyle(3, 0x654321);
+
+                this.staminaBar = this.add.rectangle(staminaX, staminaY, staminaWidth, staminaHeight, 0x2ecc71);
+                this.staminaBar.setOrigin(0, 0.5);
+
+                this.timerText = this.add.text(580, 30, '⏱️ 0:00', {
+                    fontSize: '22px',
+                    fontFamily: 'Arial',
+                    color: '#ffffff',
+                    fontStyle: 'bold',
+                    stroke: '#000000',
+                    strokeThickness: 4
+                });
+
+                this.fingerText = this.add.text(760, 30, '🎯 Palm', {
+                    fontSize: '22px',
+                    fontFamily: 'Arial',
+                    color: '#ffffff',
+                    fontStyle: 'bold',
+                    stroke: '#000000',
+                    strokeThickness: 4
+                });
+
+                this.escText = this.add.text(1050, 30, 'ESC: Menu', {
+                    fontSize: '18px',
+                    fontFamily: 'Arial',
+                    color: '#ffffff',
+                    alpha: 0.7,
+                    stroke: '#000000',
+                    strokeThickness: 3
+                });
+
+                [hudBg, this.heightText, this.staminaBg, this.staminaBar, this.timerText, this.fingerText, this.escText]
+                    .forEach(obj => obj.setScrollFactor(0).setDepth(100));
+            }
+
+            showInstructions() {
+                const instructions = this.add.text(600, 400,
+                    '🎮 CONTROLS 🎮\n\n' +
+                    'Arrow Keys OR WASD: Move\n' +
+                    'HOLD SPACE: Grab holds (they glow!)\n' +
+                    '↑/W while grabbing: Climb up\n' +
+                    '↓/S: Descend     ESC: Menu\n\n' +
+                    '💡 Rest at holds to recover stamina!',
+                    {
+                        fontSize: '20px',
+                        fontFamily: 'Arial',
+                        color: '#ffffff',
+                        backgroundColor: '#000000dd',
+                        padding: { x: 30, y: 20 },
+                        align: 'center',
+                        fontStyle: 'bold'
+                    }
+                ).setOrigin(0.5);
+
+                instructions.setScrollFactor(0).setDepth(200);
+
+                this.time.delayedCall(5000, () => {
+                    this.tweens.add({
+                        targets: instructions,
+                        alpha: 0,
+                        duration: 800,
+                        onComplete: () => instructions.destroy()
+                    });
+                });
+            }
+
+            setupCamera() {
+                this.cameras.main.setBounds(0, -100, 1200, 900);
+                this.cameras.main.startFollow(this.climber.sprite, false, 0.12, 0.18);
+                this.cameras.main.setFollowOffset(0, 180);
+            }
+
+            update() {
+                if (!this.gameActive || this.isPaused) return;
+
+                const climberState = this.climber.update(this.handWall.getHolds());
+                this.updateHoldHighlights(climberState);
+                this.updateHUD(climberState);
+
+                const reachedGoal = this.climber.checkGoalCollision(this.handWall.getGoals());
+                if (reachedGoal) {
+                    this.winGame(reachedGoal);
+                }
+
+                if (this.climber.hasFallen()) {
+                    this.gameOver();
+                }
+            }
+
+            updateHoldHighlights(climberState) {
+                const { nearestHold, isGrabbing, currentHold } = climberState;
+
+                if (this.lastNearestHold && this.lastNearestHold !== currentHold) {
+                    this.handWall.resetHoldHighlight(this.lastNearestHold);
+                }
+
+                if (nearestHold) {
+                    this.handWall.highlightNearbyHold(nearestHold.hold, isGrabbing);
+                    this.lastNearestHold = nearestHold.hold;
+                } else {
+                    this.lastNearestHold = null;
+                }
+            }
+
+            updateHUD(climberState) {
+                const height = this.climber.getHeight();
+                this.heightText.setText(`⛰️ Height: ${height}m`);
+
+                const stamina = this.climber.getStamina();
+                const staminaPercent = stamina / 100;
+                this.staminaBar.width = 280 * staminaPercent;
+
+                if (stamina < 25) {
+                    this.staminaBar.setFillStyle(0xe74c3c);
+                    if (!this.staminaPulse) {
+                        this.staminaPulse = true;
+                        this.tweens.add({
+                            targets: this.staminaBar,
+                            alpha: 0.4,
+                            duration: 350,
+                            yoyo: true,
+                            onComplete: () => {
+                                this.staminaPulse = false;
+                            }
+                        });
+                    }
+                } else if (stamina < 50) {
+                    this.staminaBar.setFillStyle(0xf39c12);
+                } else {
+                    this.staminaBar.setFillStyle(0x2ecc71);
+                }
+
+                const currentFinger = this.climber.getCurrentFinger(this.handWall.getHolds());
+                this.fingerText.setText(`🎯 ${currentFinger}`);
+            }
+
+            updateTimer() {
+                if (!this.gameActive || this.isPaused) return;
+                this.gameTime++;
+                const minutes = Math.floor(this.gameTime / 60);
+                const seconds = this.gameTime % 60;
+                this.timerText.setText(`⏱️ ${minutes}:${seconds.toString().padStart(2, '0')}`);
+            }
+
+            returnToMenu() {
+                this.gameActive = false;
+                this.cameras.main.fade(300, 0, 0, 0);
+                this.time.delayedCall(300, () => this.scene.start('MenuScene'));
+            }
+
+            gameOver() {
+                if (!this.gameActive) return;
+                this.gameActive = false;
+
+                const gameOverText = this.add.text(600, 350, '💀 FELL! 💀', {
+                    fontSize: '64px',
+                    fontFamily: 'Arial',
+                    color: '#e74c3c',
+                    fontStyle: 'bold',
+                    stroke: '#000000',
+                    strokeThickness: 8
+                }).setOrigin(0.5);
+
+                gameOverText.setScrollFactor(0).setDepth(250);
+                this.cameras.main.shake(300, 0.01);
+
+                this.time.delayedCall(2000, () => this.returnToMenu());
+            }
+
+            winGame(goal) {
+                if (!this.gameActive) return;
+                this.gameActive = false;
+
+                this.time.delayedCall(100, () => {
+                    this.createVictoryParticles(goal);
+                    this.cameras.main.shake(400, 0.008);
+
+                    this.time.delayedCall(2500, () => {
+                        this.scene.start('GameOverScene', {
+                            finger: goal.finger,
+                            height: this.climber.getHeight(),
+                            time: this.gameTime
+                        });
+                    });
+                });
+            }
+
+            createVictoryParticles(goal) {
+                const emojis = ['🎉', '🎊', '⭐', '🏆', '🚩', '💪', '🔥'];
+
+                for (let i = 0; i < 40; i++) {
+                    const emoji = emojis[Math.floor(Math.random() * emojis.length)];
+                    const particle = this.add.text(goal.x, goal.y, emoji, { fontSize: '36px' });
+                    particle.setDepth(150);
+
+                    this.tweens.add({
+                        targets: particle,
+                        x: goal.x + Phaser.Math.Between(-250, 250),
+                        y: goal.y + Phaser.Math.Between(-180, 350),
+                        angle: Phaser.Math.Between(-360, 360),
+                        alpha: 0,
+                        scale: 0.4,
+                        duration: 1800,
+                        ease: 'Cubic.easeOut',
+                        onComplete: () => particle.destroy()
+                    });
+                }
+
+                const victoryText = this.add.text(600, 280, '🎉 SUMMIT! 🎉', {
+                    fontSize: '64px',
+                    fontFamily: 'Arial',
+                    color: '#FFD700',
+                    fontStyle: 'bold',
+                    stroke: '#000000',
+                    strokeThickness: 8
+                }).setOrigin(0.5);
+
+                victoryText.setScrollFactor(0).setDepth(200);
+
+                this.tweens.add({
+                    targets: victoryText,
+                    scale: 1.3,
+                    duration: 600,
+                    yoyo: true,
+                    ease: 'Bounce'
+                });
+            }
+        }
+
+        // GameOverScene (abbreviated for space - same as before)
+        class GameOverScene extends Phaser.Scene {
+            constructor() { super({ key: 'GameOverScene' }); }
+            init(data) { this.finger = data.finger || 'Unknown'; this.height = data.height || 0; this.time = data.time || 0; }
+            create() {
+                const bg = this.add.rectangle(600, 400, 1200, 800, 0x87CEEB, 0.7);
+                const title = this.add.text(600, 200, '🏆 SUMMIT! 🏆', { fontSize: '64px', color: '#FFD700', fontStyle: 'bold' }).setOrigin(0.5);
+
+                const minutes = Math.floor(this.time / 60);
+                const seconds = this.time % 60;
+                const stats = this.add.text(600, 350,
+                    `Finger: ${this.finger.toUpperCase()}\n` +
+                    `Height: ${this.height}m\n` +
+                    `Time: ${minutes}:${seconds.toString().padStart(2, '0')}`,
+                    { fontSize: '32px', color: '#ffffff', align: 'center', fontStyle: 'bold', stroke: '#000000', strokeThickness: 4 }
+                ).setOrigin(0.5);
+
+                const playButton = this.add.rectangle(450, 550, 250, 60, 0xe74c3c).setInteractive();
+                const playText = this.add.text(450, 550, '🔄 AGAIN', { fontSize: '24px', color: '#fff', fontStyle: 'bold' }).setOrigin(0.5);
+                playButton.on('pointerdown', () => this.scene.start('GameScene'));
+
+                const menuButton = this.add.rectangle(750, 550, 250, 60, 0x3498db).setInteractive();
+                const menuText = this.add.text(750, 550, '🏠 MENU', { fontSize: '24px', color: '#fff', fontStyle: 'bold' }).setOrigin(0.5);
+                menuButton.on('pointerdown', () => this.scene.start('MenuScene'));
+            }
+        }
+
+        // ============================================
+        // Game Configuration
+        // ============================================
+        const config = {
+            type: Phaser.AUTO,
+            width: 1200,
+            height: 800,
+            parent: 'game-container',
+            backgroundColor: '#87CEEB',
+            physics: {
+                default: 'arcade',
+                arcade: { gravity: { y: 800 }, debug: false }
+            },
+            input: {
+                keyboard: {
+                    capture: [
+                        Phaser.Input.Keyboard.KeyCodes.LEFT,
+                        Phaser.Input.Keyboard.KeyCodes.RIGHT,
+                        Phaser.Input.Keyboard.KeyCodes.UP,
+                        Phaser.Input.Keyboard.KeyCodes.DOWN,
+                        Phaser.Input.Keyboard.KeyCodes.SPACE,
+                        Phaser.Input.Keyboard.KeyCodes.ESC,
+                        Phaser.Input.Keyboard.KeyCodes.A,
+                        Phaser.Input.Keyboard.KeyCodes.W,
+                        Phaser.Input.Keyboard.KeyCodes.S,
+                        Phaser.Input.Keyboard.KeyCodes.D
+                    ]
+                }
+            },
+            scene: [MenuScene, GameScene, GameOverScene]
+        };
+
+        const game = new Phaser.Game(config);
+
+        // Auto-hide click hint after clicking
+        document.getElementById('game-container').addEventListener('click', function() {
+            document.getElementById('click-hint').style.display = 'none';
+            if (game.canvas) {
+                game.canvas.focus();
+            }
+        }, { once: false });
+
+        // Try to focus immediately
+        game.events.once('ready', () => {
+            if (game.canvas) {
+                game.canvas.setAttribute('tabindex', '0');
+                game.canvas.focus();
+            }
+        });
+    </script>
+</body>
+</html>
