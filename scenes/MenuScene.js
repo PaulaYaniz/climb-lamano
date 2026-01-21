@@ -73,14 +73,14 @@ export default class MenuScene extends Phaser.Scene {
         }).setOrigin(0.5);
 
         // Left panel with shadow effect
-        const leftShadow = this.add.rectangle(305, 455, 480, 580, 0x000000, 0.3);
-        const leftPanel = this.add.rectangle(300, 450, 480, 580, 0x34495E, 0.95);
+        const leftShadow = this.add.rectangle(305, 465, 420, 500, 0x000000, 0.3);
+        const leftPanel = this.add.rectangle(300, 460, 420, 500, 0x34495E, 0.95);
         leftPanel.setStrokeStyle(5, 0x3498db, 0.8);
 
         // Panel header with icon
-        const leftHeader = this.add.rectangle(300, 235, 400, 50, 0x3498db, 0.3);
-        this.add.text(300, 235, '🎯 EL DESAFÍO', {
-            fontSize: '26px',
+        const leftHeader = this.add.rectangle(300, 255, 350, 45, 0x3498db, 0.3);
+        this.add.text(300, 255, '🎯 EL DESAFÍO', {
+            fontSize: '22px',
             fontFamily: 'Arial',
             color: '#3498db',
             fontStyle: 'bold',
@@ -89,14 +89,14 @@ export default class MenuScene extends Phaser.Scene {
         }).setOrigin(0.5);
 
         // Hand preview image with glow
-        const handGlow = this.add.circle(300, 400, 120, 0xFFFFFF, 0.1);
+        const handGlow = this.add.circle(300, 390, 100, 0xFFFFFF, 0.1);
         const handPreview = this.add.image(300, 380, 'hand');
-        handPreview.setScale(0.35);
+        handPreview.setScale(0.3);
         handPreview.setAlpha(0.95);
 
         // Animated climber on hand
-        const miniClimber = this.add.text(300, 480, '🧗', {
-            fontSize: '52px'
+        const miniClimber = this.add.text(300, 470, '🧗', {
+            fontSize: '45px'
         }).setOrigin(0.5);
 
         this.tweens.add({
@@ -109,30 +109,30 @@ export default class MenuScene extends Phaser.Scene {
         });
 
         // Challenge description with better styling
-        const descBox = this.add.rectangle(300, 630, 420, 90, 0x2C3E50, 0.6);
-        this.add.text(300, 615, '¡Escala la mano gigante', {
-            fontSize: '20px',
+        const descBox = this.add.rectangle(300, 630, 360, 75, 0x2C3E50, 0.6);
+        this.add.text(300, 618, '¡Escala la mano gigante', {
+            fontSize: '18px',
             fontFamily: 'Arial',
             color: '#ECF0F1',
             align: 'center',
             fontStyle: 'bold'
         }).setOrigin(0.5);
-        this.add.text(300, 645, 'y conquista la cima! 🚩', {
-            fontSize: '18px',
+        this.add.text(300, 642, 'y conquista la cima! 🚩', {
+            fontSize: '16px',
             fontFamily: 'Arial',
             color: '#F39C12',
             align: 'center'
         }).setOrigin(0.5);
 
         // Right panel with shadow
-        const rightShadow = this.add.rectangle(905, 455, 600, 580, 0x000000, 0.3);
-        const rightPanel = this.add.rectangle(900, 450, 600, 580, 0x34495E, 0.95);
+        const rightShadow = this.add.rectangle(905, 465, 520, 500, 0x000000, 0.3);
+        const rightPanel = this.add.rectangle(900, 460, 520, 500, 0x34495E, 0.95);
         rightPanel.setStrokeStyle(5, 0xe74c3c, 0.8);
 
         // Panel header with icon
-        const rightHeader = this.add.rectangle(900, 235, 500, 50, 0xe74c3c, 0.3);
-        this.add.text(900, 235, '📖 CÓMO JUGAR', {
-            fontSize: '26px',
+        const rightHeader = this.add.rectangle(900, 255, 440, 45, 0xe74c3c, 0.3);
+        this.add.text(900, 255, '📖 CÓMO JUGAR', {
+            fontSize: '22px',
             fontFamily: 'Arial',
             color: '#e74c3c',
             fontStyle: 'bold',
@@ -140,85 +140,85 @@ export default class MenuScene extends Phaser.Scene {
             strokeThickness: 3
         }).setOrigin(0.5);
 
-        let yPos = 310;
+        let yPos = 320;
 
         // Step 1 with improved styling
-        const step1Container = this.add.rectangle(900, yPos + 20, 540, 85, 0x27ae60, 0.2);
+        const step1Container = this.add.rectangle(900, yPos + 18, 460, 72, 0x27ae60, 0.2);
         step1Container.setStrokeStyle(3, 0x27ae60, 0.5);
 
-        const step1Number = this.add.circle(750, yPos + 20, 22, 0x27ae60);
-        this.add.text(750, yPos + 20, '1', {
-            fontSize: '24px',
+        const step1Number = this.add.circle(725, yPos + 18, 20, 0x27ae60);
+        this.add.text(725, yPos + 18, '1', {
+            fontSize: '22px',
             fontFamily: 'Arial',
             color: '#FFFFFF',
             fontStyle: 'bold'
         }).setOrigin(0.5);
 
         this.add.text(900, yPos + 5, '⬆️ Usa las FLECHAS ⬇️', {
-            fontSize: '20px',
+            fontSize: '18px',
             fontFamily: 'Arial',
             color: '#ECF0F1',
             align: 'center',
             fontStyle: 'bold'
         }).setOrigin(0.5);
-        this.add.text(900, yPos + 32, 'Muévete en cualquier dirección', {
-            fontSize: '16px',
+        this.add.text(900, yPos + 30, 'Muévete en cualquier dirección', {
+            fontSize: '15px',
             fontFamily: 'Arial',
             color: '#BDC3C7',
             align: 'center'
         }).setOrigin(0.5);
 
-        yPos += 110;
+        yPos += 95;
 
         // Step 2
-        const step2Container = this.add.rectangle(900, yPos + 20, 540, 85, 0xf39c12, 0.2);
+        const step2Container = this.add.rectangle(900, yPos + 18, 460, 72, 0xf39c12, 0.2);
         step2Container.setStrokeStyle(3, 0xf39c12, 0.5);
 
-        const step2Number = this.add.circle(750, yPos + 20, 22, 0xf39c12);
-        this.add.text(750, yPos + 20, '2', {
-            fontSize: '24px',
+        const step2Number = this.add.circle(725, yPos + 18, 20, 0xf39c12);
+        this.add.text(725, yPos + 18, '2', {
+            fontSize: '22px',
             fontFamily: 'Arial',
             color: '#FFFFFF',
             fontStyle: 'bold'
         }).setOrigin(0.5);
 
         this.add.text(900, yPos + 5, '🤚 Mantén ESPACIO', {
-            fontSize: '20px',
+            fontSize: '18px',
             fontFamily: 'Arial',
             color: '#ECF0F1',
             align: 'center',
             fontStyle: 'bold'
         }).setOrigin(0.5);
-        this.add.text(900, yPos + 32, 'Congela tu posición y recupera resistencia', {
-            fontSize: '16px',
+        this.add.text(900, yPos + 30, 'Congela y recupera resistencia', {
+            fontSize: '15px',
             fontFamily: 'Arial',
             color: '#BDC3C7',
             align: 'center'
         }).setOrigin(0.5);
 
-        yPos += 110;
+        yPos += 95;
 
         // Step 3
-        const step3Container = this.add.rectangle(900, yPos + 20, 540, 85, 0xe74c3c, 0.2);
+        const step3Container = this.add.rectangle(900, yPos + 18, 460, 72, 0xe74c3c, 0.2);
         step3Container.setStrokeStyle(3, 0xe74c3c, 0.5);
 
-        const step3Number = this.add.circle(750, yPos + 20, 22, 0xe74c3c);
-        this.add.text(750, yPos + 20, '3', {
-            fontSize: '24px',
+        const step3Number = this.add.circle(725, yPos + 18, 20, 0xe74c3c);
+        this.add.text(725, yPos + 18, '3', {
+            fontSize: '22px',
             fontFamily: 'Arial',
             color: '#FFFFFF',
             fontStyle: 'bold'
         }).setOrigin(0.5);
 
         this.add.text(900, yPos + 5, '🚩 Llega a la Cima', {
-            fontSize: '20px',
+            fontSize: '18px',
             fontFamily: 'Arial',
             color: '#ECF0F1',
             align: 'center',
             fontStyle: 'bold'
         }).setOrigin(0.5);
-        this.add.text(900, yPos + 32, 'Alcanza cualquier bandera dorada', {
-            fontSize: '16px',
+        this.add.text(900, yPos + 30, 'Alcanza cualquier bandera dorada', {
+            fontSize: '15px',
             fontFamily: 'Arial',
             color: '#BDC3C7',
             align: 'center'
